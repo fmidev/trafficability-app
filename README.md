@@ -1,4 +1,4 @@
-# Terrain Trafficability app
+# Terrain Trafficability App
 
 # Run Backend
 1. From root directory cd into backend

@@ -30,6 +30,9 @@ export default defineConfig({
     hmr: {
       host: 'localhost',
     },
+    watch: {
+      followSymlinks: false,
+    },
   },
   test: {
     globals: true,

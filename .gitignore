@@ -4,3 +4,6 @@
 
 # Dynamic plugins .dll
 bin/
+
+# CDK credentials
+cdk.context.json

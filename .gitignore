@@ -6,4 +6,4 @@
 bin/
 
 # CDK credentials
-cdk/cdk.context.json
+cdk.context.json

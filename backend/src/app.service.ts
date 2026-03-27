@@ -69,7 +69,7 @@ export class AppService {
     try {
       const allAnswers = await this.scanDynamoDBTable(scanParams);
       const filteredAnswers = (allAnswers || []).filter(isAnswer);
-      const to = 'miska.kauppinen@spatineo.com>';
+      const to = 'tuomo.smolander@fmi.fi';
       const subject = 'Monthly Update for Maastokulkukelpoisuus';
       const body = JSON.stringify(filteredAnswers);
       const text = `Number of answers: ${filteredAnswers.length}\n${body}`;

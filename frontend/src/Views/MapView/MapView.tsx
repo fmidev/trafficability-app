@@ -2,9 +2,9 @@ import { FC } from 'react';
 import MapComponent from '../../components/MapComponent/MapComponent';
 import LayerComponent from '../../components/Layers/BaseLayer';
 import MarkerLayer from '../../components/Layers/MarkerLayer';
-import { CO } from 'country-flag-icons/react/3x2';
-import { BsColumnsGap } from 'react-icons/bs';
-import COGLayer from '../../components/Layers/COGLayer';
+// import { CO } from 'country-flag-icons/react/3x2';
+// import { BsColumnsGap } from 'react-icons/bs';
+// import COGLayer from '../../components/Layers/COGLayer';
 import WMSLayerComponent from '../../components/Layers/WMSLayer';
 
 interface MapViewProps {

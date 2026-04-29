@@ -17,14 +17,19 @@ const CloudOptimizedGeoTIFFLayerComponent = () => {
     const source = new GeoTIFFSource({
       sources: [
         {
-          url: "https://pta.data.lit.fmi.fi/geo/harvestability/KKL_SMK_Suomi_2021_06_01-UTM35.tif",
+          // url: "https://pta.data.lit.fmi.fi/geo/harvestability/KKL_SMK_Suomi_2021_06_01-UTM35.tif",
+          url: "https://copernicus.data.lit.fmi.fi/dtm/twi/Europe-twi.tif",          
+          // url: "https://copernicus.data.lit.fmi.fi/dtm/twi/Finland-twi.tif",
         },
       ],
+      // interpolate: false,
+      // convertToRGB: true,
+      // normalize: false,
     });
     const layer = new TileLayer({
       zIndex: 1000,
       source: source,
-      opacity: 1,
+      opacity: 0.8,
     });
 
     layers.getLayers().push(layer);

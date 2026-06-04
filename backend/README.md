@@ -58,6 +58,16 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## S3 setup
+
+For non-AWS environments, you will have to set up S3 access via the following environment variables:
+
+```shell
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+S3_ENDPOINT=
+```
+
 ## Resources
 
 Check out a few resources that may come in handy when working with NestJS:

@@ -1,34 +1,11 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Param,
-  Post,
-  Query,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Query, Res } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Answer } from './app.interface';
 import { AppDto } from './app.dto';
+import { Answer } from './app.interface';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  @Get('/')
-  async getAnswers(): Promise<Answer[]> {
-    try {
-      const res = await this.appService.getAnswers();
-      return res;
-    } catch (err) {
-      console.error(err, 'In catch block');
-      throw new HttpException('bad reqeust', HttpStatus.BAD_REQUEST, {
-        cause: err.message,
-      });
-    }
-  }
+  constructor(private readonly appService: AppService) { }
 
   @Get('/presigned-url/:fileName')
   async getSignedURL(
@@ -43,9 +20,30 @@ export class AppController {
       );
       res.json({ uploadURL, Key, uuid });
     } catch (err) {
+      let message = '';
+      if (err instanceof Error) {
+        message = (err as Error).message;
+      }
       res.status(500).json({
         message: 'Could not generate pre-signed URL',
-        error: err.message,
+        error: message,
+      });
+    }
+  }
+
+  @Get('/')
+  async getAnswers(): Promise<Answer[]> {
+    try {
+      const res = await this.appService.getAnswers();
+      return res;
+    } catch (err) {
+      console.error(err, 'In catch block');
+      let message = '';
+      if (err instanceof Error) {
+        message = (err as Error).message;
+      }
+      throw new HttpException('bad reqeust', HttpStatus.BAD_REQUEST, {
+        cause: message,
       });
     }
   }

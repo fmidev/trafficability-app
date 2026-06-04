@@ -10,6 +10,8 @@ interface FrontendStackProps extends cdk.StackProps {
 }
 
 export class PhotoBucketStack extends cdk.Stack {
+  bucket: s3.Bucket
+
   constructor(scope: Construct, id: string, { domainName, ...props }: FrontendStackProps) {
     super(scope, id, props);
 
@@ -32,6 +34,8 @@ export class PhotoBucketStack extends cdk.Stack {
         restrictPublicBuckets: false,
       }),
     });
+
+    this.bucket = bucket;
 
     const identityPool = new cognito.CfnIdentityPool(this, 'IdentityPool', {
       allowUnauthenticatedIdentities: true,

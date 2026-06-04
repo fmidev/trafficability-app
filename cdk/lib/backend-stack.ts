@@ -1,6 +1,4 @@
 import * as cdk from "aws-cdk-lib";
-import * as apigateway from "aws-cdk-lib/aws-apigateway";
-import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as ecrAssets from "aws-cdk-lib/aws-ecr-assets";
 import * as ecs from "aws-cdk-lib/aws-ecs";
@@ -8,6 +6,7 @@ import * as ecsPatterns from "aws-cdk-lib/aws-ecs-patterns";
 import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as route53 from "aws-cdk-lib/aws-route53";
+import { IBucket } from "aws-cdk-lib/aws-s3";
 import { Construct } from "constructs";
 import * as dotenv from 'dotenv';
 import path = require("path");
@@ -16,13 +15,14 @@ dotenv.config();
 
 interface BackendStackProps extends cdk.StackProps {
   domainName: string;
+  responseBucket: IBucket;
 }
 
 export class BackendStack extends cdk.Stack {
   constructor(
     scope: Construct,
     id: string,
-    { domainName, ...props }: BackendStackProps
+    { domainName, responseBucket, ...props }: BackendStackProps
   ) {
     super(scope, id, props);
 
@@ -34,18 +34,9 @@ export class BackendStack extends cdk.Stack {
       ipAddresses: ec2.IpAddresses.cidr("10.0.0.0/16"),
       enableDnsSupport: true,
     });
-
-    const table = new dynamodb.Table(this, 'MyTable', {
-      partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      tableName: 'MaastonkulkukelpoisuusTable',
-    });
-
     const ecsTaskRole = new iam.Role(this, 'ECSTaskRole', {
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
     });
-
-    ecsTaskRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess'));
 
     const image = new ecrAssets.DockerImageAsset(this, "Image", {
       directory: path.join(__dirname, "../../backend"),
@@ -67,14 +58,15 @@ export class BackendStack extends cdk.Stack {
         publicLoadBalancer: true,
         redirectHTTP: true,
         taskImageOptions: {
-          //image: ecs.ContainerImage.fromEcrRepository(image),
           image: ecs.ContainerImage.fromDockerImageAsset(image),
           containerPort: 3000,
           environment: {
             VITE_BACKEND_API_URL: `https://api.${domainName}`,
             NODE_ENV: process.env.NODE_ENV || "production",
             FRONTEND_URL: process.env.FRONTEND_URL || "https://maastonkulkukelpoisuus-dev.fi",
-            DYNAMODB_TABLE_NAME: table.tableName,
+            RESPONSE_S3_BUCKET: responseBucket.bucketName,
+            RESPONSE_S3_ANSWER_PREFIX: 'answers',
+            RESPONSE_S3_IMAGE_PREFIX: 'images',
             AWS_REGION: this.region,
           },
           taskRole: ecsTaskRole,
@@ -82,17 +74,7 @@ export class BackendStack extends cdk.Stack {
       }
     );
 
-    service.taskDefinition.addToTaskRolePolicy(new iam.PolicyStatement({
-      effect: iam.Effect.ALLOW,
-      actions: [
-        's3:GetObject', 
-        's3:PutObject', 
-        'dynamodb:PutItem',
-        'dynamodb:GetItem',
-        'dynamodb:Scan',
-        'dynamodb:Query',],
-      resources: ['*'],
-    }))
+    responseBucket.grantReadWrite(service.taskDefinition.taskRole);
 
     service.targetGroup.configureHealthCheck({
       path: '/health',

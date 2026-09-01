@@ -20,7 +20,7 @@ const WMSLayerComponent = () => {
     const yyyy = now.getUTCFullYear();
     const mm = String(now.getUTCMonth() + 1).padStart(2, "0");
     const dd = String(now.getUTCDate()).padStart(2, "0");
-    const time = `${yyyy}${mm}${dd}T000000`;
+    // const time = `${yyyy}${mm}${dd}T000000`;
 
     const source = new TileWMS({
       url: "https://sm.cryo-scope.eu/wms",

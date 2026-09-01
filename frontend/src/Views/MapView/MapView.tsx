@@ -100,12 +100,12 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
           <div>
             <div style={{ fontWeight: 600, marginBottom: 2 }}>TWI</div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-              <span>{t.dry}</span>
-              <div style={{ width: 12, height: 130,
-                            background: 'linear-gradient(to bottom, #ffffff, #1e1e1e)',
-                            border: '1px solid #ccc' }} />
               <span>{t.wet}</span>
-            </div>
+              <div style={{ width: 12, height: 130,
+                background: 'linear-gradient(to bottom, #1e1e1e, #ffffff)',
+                border: '1px solid #ccc' }} />
+              <span>{t.dry}</span>
+          </div>
           </div>
         )}
       </div>

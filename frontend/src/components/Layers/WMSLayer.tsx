@@ -15,16 +15,24 @@ const WMSLayerComponent = () => {
 
   useEffect(() => {
     if (!map || !layers) return;
+
+    const now = new Date();
+    const yyyy = now.getUTCFullYear();
+    const mm = String(now.getUTCMonth() + 1).padStart(2, "0");
+    const dd = String(now.getUTCDate()).padStart(2, "0");
+    const time = `${yyyy}${mm}${dd}T000000`;
+
     const source = new TileWMS({
-      url: "https://smartmet.xyz/wms?",
+      url: "https://sm.cryo-scope.eu/wms",
       // url: "https://desm.harvesterseasons.com/wms",
       params: {
-        LAYERS: "gui:isobands:XTRAFF_SWI1_ENSMEAN_300M",
+        LAYERS: "gui:isobands:XTRAFF_SWI1_ENSMEAN",
         // LAYERS: "harvester:ecens:TSOIL-K",
         FORMAT: "image/png",
         // TIME: "20250806T000000",
         // ORIGIN_TIME: "20250806T000000"
-        TIME: "20250826T000000",
+        // TIME: time,
+        TIME: "20260824T000000",
         ORIGIN_TIME: "20250101T000000"
       },
     });

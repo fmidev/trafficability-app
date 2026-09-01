@@ -10,6 +10,11 @@ import {
   Image,
   HStack,
   useBreakpointValue,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import soil_boot_footprint from "../assets/soil_boot_footprint.png";
 import { Position } from "../types";
@@ -219,6 +224,7 @@ const AppContainer = () => {
 
   return (
     <Grid
+      data-testid="main-view"
       minH="100vh"
       maxW="900px"
       m="auto"
@@ -228,40 +234,19 @@ const AppContainer = () => {
         "header"
         "info"
         "map"
-        "exampleFileArea"
-        "uploadFileArea"
-        "uploadedFileArea"
-        "radioButton"
-        "radioButton2"
-        "contestantNameArea"
-        "checkoxArea"
-        "send"
+        "observation"
         `}
       gridTemplateRows={{
         base: `
           minmax(20px, max-content)
           minmax(20px, max-content)
-          minmax(400px, max-content)   
-          minmax(300px, max-content)
-          minmax(30px, max-content)
           minmax(auto, max-content)
-          minmax(auto, max-content) 
-          auto
-          auto
-          auto 
-          auto`,
+          minmax(auto, max-content)`,
         sm: `
           minmax(20px, max-content)
           minmax(20px, max-content)
-          minmax(400px, max-content) 
-          minmax(400px, max-content) 
-          minmax(auto, max-content) 
-          minmax(auto, max-content) 
-          minmax(auto, max-content) 
-          auto
-          auto
-          auto 
-          auto`,
+          minmax(auto, max-content)
+          minmax(auto, max-content)`,
       }}
       gridTemplateColumns={"100%"}
       fontFamily="Poppins"
@@ -312,7 +297,7 @@ const AppContainer = () => {
       <GridItem area={"info"} height="100%">
         <InfoComponent currentLanguage={currentLanguage} />
       </GridItem>
-      <GridItem area={"map"} height={{ base: "400px", sm: "550px" }}>
+      <GridItem area={"map"} height="auto">
         <Box>
           <HStack w="100%">
             <Box>
@@ -327,7 +312,7 @@ const AppContainer = () => {
             <Text fontSize="small">{language.mapTexts.subHeader}</Text>
           </Box>
         </Box>
-        <Box height="86%">
+        <Box>
           <MapView
             mapInfoText={language.mapTexts.mapInfoText}
             setCrosshair={updateCrosshair}
@@ -339,167 +324,188 @@ const AppContainer = () => {
         </Box>
       </GridItem>
 
-      <GridItem
-        area={"exampleFileArea"}
-        height={{ base: "320px", sm: "450px" }}
-      >
-        <Box h="100%">
-          <HStack h="10%">
-            <AddPhotoAlternateOutlined
-              fontSize={isMobile ? "medium" : "large"}
-              sx={{ marginLeft: "-2px", marginRight: "-4px" }}
-            />
-            <Header title={language.examplePictureText.header} showAsterisk />
-          </HStack>
+      <GridItem area={"observation"} mt="2">
+        <Accordion allowToggle>
+          <AccordionItem border="1px solid" borderColor="gray.200" borderRadius="md">
+            <AccordionButton px="3" py="3" _hover={{ bg: "gray.100" }}>
+              <HStack flex="1" textAlign="left">
+                <AddPhotoAlternateOutlined
+                  fontSize={isMobile ? "medium" : "large"}
+                  sx={{ marginLeft: "-2px", marginRight: "-4px" }}
+                />
+                <Box as="span" fontWeight="600" fontSize="lg">
+                  {language.leaveObservation?.header ||
+                  (currentLanguage === "en" ? "Leave your observation" : "Jätä oma havaintosi")}
+                </Box>
+              </HStack>
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel px="2" pb="4">
+              <GridItem
+                area={"exampleFileArea"}
+                height={{ base: "320px", sm: "450px" }}
+              >
+                <Box h="100%">
+                  <HStack h="10%">
+                    <AddPhotoAlternateOutlined
+                      fontSize={isMobile ? "medium" : "large"}
+                      sx={{ marginLeft: "-2px", marginRight: "-4px" }}
+                    />
+                    <Header title={language.examplePictureText.header} showAsterisk />
+                  </HStack>
 
-          <Box h="90%" w="100%" flex="1" borderRadius="md" boxShadow="sm">
-            <Image
-              src={soil_boot_footprint}
-              h="100%"
-              w="100%"
-              objectFit="cover"
-              border="1px solid"
-              borderColor="inherit"
-              borderRadius="md"
-            />
-          </Box>
-        </Box>
-      </GridItem>
+                  <Box h="90%" w="100%" flex="1" borderRadius="md" boxShadow="sm">
+                    <Image
+                      src={soil_boot_footprint}
+                      h="100%"
+                      w="100%"
+                      objectFit="cover"
+                      border="1px solid"
+                      borderColor="inherit"
+                      borderRadius="md"
+                    />
+                  </Box>
+                </Box>
+              </GridItem>
 
-      <GridItem
-        area={"uploadFileArea"}
-        h="100%"
-        height={{ base: "auto", sm: "auto" }}
-        w="auto"
-        mt="2"
-      >
-        <Box h="100%">
-          <FilesView
-            buttonText={language.fileField.text}
-            isStreamActive={isStreamActive}
-            setIsStreamActive={setIsStreamActive}
-            fileUpdate={setFileField}
-            pictureName={pictureField.name}
-            updatePicture={updatePicture}
-            setMobilePicture={setMobilePictureField}
-            mobilePictureName={mobilePictureField.name}
-            selectedFileName={fileField.name}
-            setFileDateTimeOriginal={setfileDateTime}
-            setFileGeoLocation={updateFileGeoLocation}
-          />
-        </Box>
-      </GridItem>
+              <GridItem
+                area={"uploadFileArea"}
+                h="100%"
+                height={{ base: "auto", sm: "auto" }}
+                w="auto"
+                mt="2"
+              >
+                <Box h="100%">
+                  <FilesView
+                    buttonText={language.fileField.text}
+                    isStreamActive={isStreamActive}
+                    setIsStreamActive={setIsStreamActive}
+                    fileUpdate={setFileField}
+                    pictureName={pictureField.name}
+                    updatePicture={updatePicture}
+                    setMobilePicture={setMobilePictureField}
+                    mobilePictureName={mobilePictureField.name}
+                    selectedFileName={fileField.name}
+                    setFileDateTimeOriginal={setfileDateTime}
+                    setFileGeoLocation={updateFileGeoLocation}
+                  />
+                </Box>
+              </GridItem>
 
-      {showTakenPicture && (
-        <GridItem
-          area={"uploadedFileArea"}
-          minH="250px"
-          height={{ base: "288px", sm: "405px" }}
-          mt="2"
-          boxSizing="border-box"
-        >
-          <Flex
-            h="100%"
-            flexDirection={isMobile ? "row" : "column"}
-            justifyContent="center"
-            wrap="nowrap"
-            gap="2"
-            mt="1"
-            width="100%"
-            ml="auto"
-            mr="auto"
-          >
-            <Box
-              h="100%"
-              w="100%"
-              flex="1"
-              borderRadius="md"
-              overflow="hidden"
-              boxShadow="sm"
-            >
-              {renderImage(fileField.data) ||
-                renderImage(pictureField.data) ||
-                renderImage(mobilePictureField.data)}
-            </Box>
-          </Flex>
-        </GridItem>
-      )}
-      <GridItem
-        area={"radioButton"}
-        mt={showTakenPicture ? { base: "2" } : { base: "2", sm: "4" }}
-        height={{ base: "100%", sm: "100%" }}
-      >
-        <Box h="100%">
-          <HStack>
-            <WaterDropOutlined
-              fontSize={isMobile ? "medium" : "large"}
-              sx={{ marginLeft: "-6px", marginRight: "-4px" }}
-            />
-            <Header title={language.soilMoisture.header} showAsterisk />
-          </HStack>
-          <RadioInputComponent
-            answers={language.soilMoisture.options}
-            info={language.soilMoisture.moreInfo}
-            updateValue={updateAnswer}
-          />
-        </Box>
-      </GridItem>
+              {showTakenPicture && (
+                <GridItem
+                  area={"uploadedFileArea"}
+                  minH="250px"
+                  height={{ base: "288px", sm: "405px" }}
+                  mt="2"
+                  boxSizing="border-box"
+                >
+                  <Flex
+                    h="100%"
+                    flexDirection={isMobile ? "row" : "column"}
+                    justifyContent="center"
+                    wrap="nowrap"
+                    gap="2"
+                    mt="1"
+                    width="100%"
+                    ml="auto"
+                    mr="auto"
+                  >
+                    <Box
+                      h="100%"
+                      w="100%"
+                      flex="1"
+                      borderRadius="md"
+                      overflow="hidden"
+                      boxShadow="sm"
+                    >
+                      {renderImage(fileField.data) ||
+                        renderImage(pictureField.data) ||
+                        renderImage(mobilePictureField.data)}
+                    </Box>
+                  </Flex>
+                </GridItem>
+              )}
+              <GridItem
+                area={"radioButton"}
+                mt={showTakenPicture ? { base: "2" } : { base: "2", sm: "4" }}
+                height={{ base: "100%", sm: "100%" }}
+              >
+                <Box h="100%">
+                  <HStack>
+                    <WaterDropOutlined
+                      fontSize={isMobile ? "medium" : "large"}
+                      sx={{ marginLeft: "-6px", marginRight: "-4px" }}
+                    />
+                    <Header title={language.soilMoisture.header} showAsterisk />
+                  </HStack>
+                  <RadioInputComponent
+                    answers={language.soilMoisture.options}
+                    info={language.soilMoisture.moreInfo}
+                    updateValue={updateAnswer}
+                  />
+                </Box>
+              </GridItem>
 
-      <GridItem area={"radioButton2"} mt={{ base: "2", sm: "6" }}>
-        <Box>
-          <HStack>
-            <AssessmentOutlined
-              fontSize={isMobile ? "medium" : "large"}
-              sx={{ marginLeft: "-2.5px", marginRight: "-4px" }}
-            />
-            <Header
-              title={language.certaintyOfObservationAssessment.header}
-              showAsterisk
-            />
-          </HStack>
-          <RadioInputComponent
-            answers={language.certaintyOfObservationAssessment.options}
-            updateValue={updateEvaluateAnswer}
-          />
-        </Box>
-      </GridItem>
-      <GridItem area={"contestantNameArea"} mt={{ base: "2", sm: "6" }}>
-        <HStack pb="2">
-          <EmojiEventsOutlined
-            fontSize={isMobile ? "medium" : "large"}
-            sx={{ marginLeft: "-2.5px", marginRight: "-4px" }}
-          />
-          <Header title={language.commentComponent.header} />
-        </HStack>
-        <ContactComponent
-          contestantName={contestantName}
-          setContestantName={updateContestantName}
-          header={language.commentComponent.header}
-          subHeaderText={language.commentComponent.subHeaderText}
-        />
-        <GridItem area={"checkoxArea"} mt="2">
-          <CheckboxComponent
-            text={language.checkboxComponent.text}
-            readMore={language.checkboxComponent.readMore}
-            checkboxValue={check}
-            setChecked={updateCheck}
-            modalContent={language.checkboxComponent.modalContent}
-          />
-        </GridItem>
-      </GridItem>
-      <GridItem area={"send"}>
-        <Flex
-          position="relative"
-          mt="3"
-          mb="4"
-          w="100%"
-          justifyContent="center"
-        >
-          <SubmitButtonComponent
-            handleSubmit={handleSubmitWrapper}
-            send={language.sendButton.text}
-          />
-        </Flex>
+              <GridItem area={"radioButton2"} mt={{ base: "2", sm: "6" }}>
+                <Box>
+                  <HStack>
+                    <AssessmentOutlined
+                      fontSize={isMobile ? "medium" : "large"}
+                      sx={{ marginLeft: "-2.5px", marginRight: "-4px" }}
+                    />
+                    <Header
+                      title={language.certaintyOfObservationAssessment.header}
+                      showAsterisk
+                    />
+                  </HStack>
+                  <RadioInputComponent
+                    answers={language.certaintyOfObservationAssessment.options}
+                    updateValue={updateEvaluateAnswer}
+                  />
+                </Box>
+              </GridItem>
+              <GridItem area={"contestantNameArea"} mt={{ base: "2", sm: "6" }}>
+                <HStack pb="2">
+                  <EmojiEventsOutlined
+                    fontSize={isMobile ? "medium" : "large"}
+                    sx={{ marginLeft: "-2.5px", marginRight: "-4px" }}
+                  />
+                  <Header title={language.commentComponent.header} />
+                </HStack>
+                <ContactComponent
+                  contestantName={contestantName}
+                  setContestantName={updateContestantName}
+                  header={language.commentComponent.header}
+                  subHeaderText={language.commentComponent.subHeaderText}
+                />
+                <GridItem area={"checkoxArea"} mt="2">
+                  <CheckboxComponent
+                    text={language.checkboxComponent.text}
+                    readMore={language.checkboxComponent.readMore}
+                    checkboxValue={check}
+                    setChecked={updateCheck}
+                    modalContent={language.checkboxComponent.modalContent}
+                  />
+                </GridItem>
+              </GridItem>
+              <GridItem area={"send"}>
+                <Flex
+                  position="relative"
+                  mt="3"
+                  mb="4"
+                  w="100%"
+                  justifyContent="center"
+                >
+                  <SubmitButtonComponent
+                    handleSubmit={handleSubmitWrapper}
+                    send={language.sendButton.text}
+                  />
+                </Flex>
+              </GridItem>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </GridItem>
     </Grid>
   );

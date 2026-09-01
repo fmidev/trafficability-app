@@ -70,6 +70,9 @@ export const lang = {
         }
       ]
     },
+    leaveObservation: {
+      header: "Jätä havainto"
+    },
     mainTitle: {
       header: "Vettä kengässä? Maaston kosteus ja kulkukelpoisuus",
     },
@@ -229,12 +232,12 @@ export const lang = {
           markdown: true
         },
         {
-          text: '**Using the Water in Your Boot? App Without an Internet Connection**\n',
+          text: '**Using the Water in Your Boots? App Without an Internet Connection**\n',
           markdown: true
         },
         {
           text: 
-          'If you\'re heading to an area without a working internet connection, you can still use the Water in Your Boot? app to submit an observation. Here\'s how:\n',
+          'If you\'re heading to an area without a working internet connection, you can still use the Water in Your Boots? app to submit an observation. Here\'s how:\n',
           markdown: true
         },
         {
@@ -270,6 +273,9 @@ export const lang = {
           markdown: true
         }
       ]
+    },
+    leaveObservation: {
+      header: "Leave your observation"
     },
     mainTitle: {
       header:  "Water in Your Boots? Terrain Moisture and Trafficability",

@@ -18,19 +18,21 @@ const COGLayerComponent = () => {
   useEffect(() => {
     if (!map || !layers) return;
 
-    // TODO: this function creates the styling function for the TWI data using the "value" retrieved for the center coordinates
-    const createStyleForValue = (value: number) : Style => {
+    // Greyscale TWI: light = dry (low TWI), dark = wet (high TWI).
+    // band 1 is normalised 0..1 by min/max below; (1 - band) inverts it,
+    // so dry → light (255), wet → dark. The +30 floor keeps wet from going
+    // fully black, so multiply darkens the SWI colour instead of erasing it.
+    const createStyleForValue = (_value: number): Style => {
       return {
         color: [
           'color',
-          // red: combine the sampled TWI value with the first raster band
-          ['*', 255, ['+', value, ['band', 1]]],
-          // green: use the first raster band for the TWI visualization
-          ['*', 255, ['band', 1]],
-          // blue: use the first raster band for the TWI visualization
-          ['*', 255, ['band', 1]],
-          // alpha
-          ['band', 2],
+          //['*', 255, ['-', 1, ['band', 1]]], // red
+          //['*', 255, ['-', 1, ['band', 1]]], // green
+          //['*', 255, ['-', 1, ['band', 1]]], // blue
+          ['+', 30, ['*', 225, ['clamp', ['-', 1, ['band', 1]], 0, 1]]], // red
+          ['+', 30, ['*', 225, ['clamp', ['-', 1, ['band', 1]], 0, 1]]], // green
+          ['+', 30, ['*', 225, ['clamp', ['-', 1, ['band', 1]], 0, 1]]], // blue
+          ['band', 2],                        // alpha
         ],
       }
     }
@@ -39,16 +41,22 @@ const COGLayerComponent = () => {
       sources: [
         {
           url: "https://copernicus.data.lit.fmi.fi/dtm/twi/Europe-twi.tif",
-          // TODO: value range that will be used to normalize values for the style function
-          min: -10,
-          max: 10,
+          // Data stats: mean -4.6, stddev 1.9, min -11.1, max 10.5.
+          // Wide/low-contrast window (whole range included):
+          //min: -10,
+          //max: 10,
+          // Tighter/high-contrast window (mean ± ~1.5σ), for visible local
+          // differences — swap the two lines above for these:
+          min: -7.5,
+          max: -1.5,
         },
       ],
     });
     const layer = new TileLayer({
-      zIndex: 1000,
+      zIndex: 1100,
+      className: "twi-blend",
       source: source,
-      opacity: 1,
+      opacity: 0.6,
       style: createStyleForValue(0),
     });
 

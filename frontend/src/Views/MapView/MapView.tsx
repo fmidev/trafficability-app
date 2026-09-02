@@ -87,14 +87,14 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
 
       {/* Legend — flex row so the two legends sit side by side when both are shown */}
       <div style={{ position: 'absolute', bottom: 10, right: 10, zIndex: 1000,
-                    background: '#fff', padding: 6, borderRadius: 4,
-                    boxShadow: '0 1px 4px rgba(0,0,0,.3)', font: '11px sans-serif',
-                    display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                    background: '#fff', padding: 5, borderRadius: 4,
+                    boxShadow: '0 1px 4px rgba(0,0,0,.3)', font: '13px sans-serif',
+                    display: 'flex', gap: 8, alignItems: 'flex-start' }}>
         {layerMode !== 'cog' && (
           <div>
             <div style={{ fontWeight: 600, marginBottom: 2 }}>{t.swiTitle}</div>
             <img src={WMS_LEGEND_URL} alt="XTRAFF SWI legend"
-                 style={{ display: 'block', height: 170, width: 'auto' }} />
+                 style={{ display: 'block', height: 230, width: 'auto' }} />
           </div>
         )}
         {layerMode !== 'wms' && (
@@ -102,11 +102,11 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
             <div style={{ fontWeight: 600, marginBottom: 2 }}>TWI</div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
               <span>{t.wet}</span>
-              <div style={{ width: 12, height: 130,
+              <div style={{ width: 16, height: 190,
                 background: 'linear-gradient(to bottom, #1e1e1e, #ffffff)',
                 border: '1px solid #ccc' }} />
               <span>{t.dry}</span>
-          </div>
+            </div>
           </div>
         )}
       </div>

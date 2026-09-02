@@ -17,8 +17,9 @@ interface MapViewProps {
 
 type LayerMode = 'wms' | 'cog' | 'both';
 
-const WMS_LEGEND_URL =
-  'https://sm.cryo-scope.eu/wms?service=WMS&request=GetLegendGraphic&version=1.3.0&sld_version=1.1.0&style=default&format=image%2Fpng&layer=gui%3Aisobands%3AXTRAFF_SWI1_ENSMEAN&width=300&height=250';
+//const WMS_LEGEND_URL =
+//  'https://sm.cryo-scope.eu/wms?service=WMS&request=GetLegendGraphic&version=1.3.0&sld_version=1.1.0&style=default&format=image%2Fpng&layer=gui%3Aisobands%3AXTRAFF_SWI1_ENSMEAN&width=300&height=250';
+const WMS_LEGEND_URL = '/swclass_legend_v2.png';
 
 // UI strings for the layer selector + legend, per language.
 const L: Record<string, {

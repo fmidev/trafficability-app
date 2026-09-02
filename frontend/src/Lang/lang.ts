@@ -67,7 +67,17 @@ export const lang = {
           '*   Pidä lomake avoinna sovelluksessa – voit lähettää sen, kun saat internetyhteyden.\n' +
           '\n',
           markdown: true
-        }
+        },
+                {
+          text: '**XTRAFF maaston kosteus ja TWI topografinen kosteusindeksi**',
+          markdown: true
+        },
+        {
+          text: `XTRAFF maaston kosteus tuote on päivittäinen ennuste maanpinnan kosteudesta 
+          viidellä tasolla, erittäin kuivasta erittäin märkään. Se yhdistää sää-, satelliitti- 
+          ja maastotietoa sekä Vettä kengässä! -käyttäjien lähettämiä havaintoja.`,
+          markdown: false
+        },
       ]
     },
     leaveObservation: {

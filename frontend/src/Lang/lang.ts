@@ -73,11 +73,20 @@ export const lang = {
           markdown: true
         },
         {
-          text: `XTRAFF maaston kosteus tuote on päivittäinen ennuste maanpinnan kosteudesta 
+          text: `XTRAFF maaston kosteus tuote on päivittäinen XGBoost koneoppimisennuste maanpinnan kosteudesta 
           viidellä tasolla, erittäin kuivasta erittäin märkään. Se yhdistää sää-, satelliitti- 
-          ja maastotietoa sekä Vettä kengässä! -käyttäjien lähettämiä havaintoja.`,
+          ja maastotietoa sekä Vettä kengässä! -käyttäjien lähettämiä havaintoja. Ennuste lasketaan ECMWF:n 15 päivän parviennusteesta nykyiselle päivälle, kartta
+           esittää parven keskiarvon. Kaikkia uusia kosteushavaintoja käytetään mallin validointiin ja uudelleen kouluttamiseen.`,
           markdown: false
         },
+          {
+          text: `TWI topografinen kosteusindeksi (topographic wetness index) Topografinen kosteusindeksi (TWI) kertoo maaston muodon perusteella, 
+          mitkä kohdat pysyvät tyypillisesti märkinä. Vesi valuu alaspäin ja kerääntyy mataliin, 
+          tasaisiin ja suppeneviin kohtiin, joten laaksot ja painanteet ovat märkiä (tummia) ja 
+          rinteet ja harjanteet kuivia (vaaleita). Se kuvaa maaston taipumusta pidättää vettä, ei tietyn päivän säätä.`,
+          markdown: false
+        },
+      
       ]
     },
     leaveObservation: {
@@ -230,11 +239,11 @@ export const lang = {
       header: "More information",
       body: [
         {
-          text: 'Water in Your Boots! is a service designed for everyone on the move in nature—whether your means of travel is boots, an ATV, a forestry machine, or something else. The moisture content of the terrain affects its trafficability: soft or waterlogged ground can slow you down, complicate work, and force you off your planned route. With the app, you can snap a photo of the terrain and the sole of your boot, give your assessment of the ground’s wetness, and submit your observation. These observations are then used to evaluate and improve the accuracy of the app’s moisture forecasts to develop better estimates.',
+          text: 'Water in Your Boots! is a service designed for everyone on the move in nature—whether your means of travel is boots, an ATV, a forestry machine, or something else. The soil wetness content of the terrain affects its trafficability: soft or waterlogged ground can slow you down, complicate work, and force you off your planned route. With the app, you can snap a photo of the terrain and the sole of your boot, give your assessment of the ground’s wetness, and submit your observation. These observations are then used to evaluate and improve the accuracy of the app’s soil wetness forecasts to develop better estimates.',
           markdown: false
         },
         {
-          text: 'Terrain moisture/dryness affects more than just trafficability. In the Arctic, wildfires have become a pressing and real threat—not just a future challenge. Wildfires can destroy large areas and cause significant damage to local ecosystems and communities. The moisture observations collected via the Water in Your Boots! app help anticipate fire risks and support preparedness efforts as drought conditions worsen. Each observation contributes to a clearer picture of moisture variations across the landscape and pinpoints areas at greatest risk for wildfires. This information is crucial for protecting Arctic regions, and every observer can help build a more sustainable future.',
+          text: 'Terrain wetness/dryness affects more than just trafficability. In the Arctic, wildfires have become a pressing and real threat—not just a future challenge. Wildfires can destroy large areas and cause significant damage to local ecosystems and communities. The soil wetness observations collected via the Water in Your Boots! app help anticipate fire risks and support preparedness efforts as drought conditions worsen. Each observation contributes to a clearer picture of soil wetness variations across the landscape and pinpoints areas at greatest risk for wildfires. This information is crucial for protecting Arctic regions, and every observer can help build a more sustainable future.',
           markdown: false
         },
         {
@@ -270,7 +279,7 @@ export const lang = {
         {
           text: 
           'Take a photo of the observation:\n' +
-          '*   Capture the terrain’s moisture condition using your phone’s camera.\n' +
+          '*   Capture the terrain’s wetness condition using your phone’s camera.\n' +
           '*   The photo’s timestamp helps identify when the observation was made.\n' +
           '*   The photo’s location data helps determine where the observation was taken.\n',
           markdown: true
@@ -281,6 +290,18 @@ export const lang = {
           '*   Record your observation using the form.\n' +
           '*   Keep the form open in the app—you can submit it once you’re back online.\n',
           markdown: true
+        },
+                {
+          text: '**XTRAFF soil wetness and TWI topographic wetness index**\n',
+          markdown: true
+        },
+        {
+          text: 'The XTRAFF soil wetness product is a daily XGBoost machine-learning forecast of ground-surface soil wetness at five levels, from Very dry to Extremely wet. It combines weather, satellite and terrain data with observations submitted by Water in Your Boots! users. The forecast is computed from ECMWFs 15-day ensemble forecast for the current day, and the map shows the ensemble mean. All new soil wetness observations are used to validate and retrain the model.',
+          markdown: false
+        },
+        {
+          text: 'The topographic wetness index (TWI) uses the shape of the terrain to indicate which spots tend to stay wet. Water flows downhill and collects in low, flat and converging areas, so valleys and hollows are wet (dark) while slopes and ridges are dry (light). It reflects the terrains tendency to hold water, not the weather on any given day.',
+          markdown: false
         }
       ]
     },
@@ -288,7 +309,7 @@ export const lang = {
       header: "Leave your observation"
     },
     mainTitle: {
-      header:  "Water in Your Boots? Terrain Moisture and Trafficability",
+      header:  "Water in Your Boots? Soil wetness and Terrain trafficability",
     },
     mapTexts: {
       header: "Observation location",
@@ -302,7 +323,7 @@ export const lang = {
       text: "Drop or select a picture"
     },
     soilMoisture: {
-      header: "Terrain moisture",
+      header: "Soil wetness",
       options: [
         "Very dry",
         "Dry",
@@ -411,7 +432,7 @@ export const lang = {
     errorMessages: {
       position: "The location of the observation is required.",
       pictureField: "Picture image is required.",
-      answerField: "Soil moisture accessment is required.",
+      answerField: "Soil wetness accessment is required.",
       evaluteAnswer: "Assessment of certainty in my observations is required.",
       checkbox: "Acceptance of the privacy statement is required.",
       offline: "No internet connection.",

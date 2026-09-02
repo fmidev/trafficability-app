@@ -16,7 +16,7 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "@chakra-ui/react";
-import soil_boot_footprint from "../assets/soil_boot_footprint.png";
+import soil_boot_footprint from "../assets/priittafigs.png";
 import { Position } from "../types";
 import AppContext from "../context/AppContext/AppContext";
 import {

@@ -70,8 +70,13 @@ export const handleSubmit = async (
     const preSignedURLResponse = await fetch(
       `${apiURL}/presigned-url/${currentFileName}?contentType=${contentType}`
     );
+    console.log(apiURL)
+    console.log(preSignedURLResponse)
+    console.log(preSignedURLResponse.json())
 
     const { uploadURL, uuid } = await preSignedURLResponse.json();
+    console.log(uploadURL, uuid)
+
 
     if (fileData instanceof File) {
       const uploadResponse = await fetch(uploadURL, {

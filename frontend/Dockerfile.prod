@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 ENV DEV=false
-ENV VITE_BACKEND_PROD_API_URL=https://api-trafficability.2.rahtiapp.fi/
+ENV VITE_BACKEND_PROD_API_URL=https://api-trafficability.2.rahtiapp.fi
 
 # Build the application
 RUN npm run build

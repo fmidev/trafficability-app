@@ -1,9 +1,11 @@
-
 # .v4p backup files
 *~.xml
-
 # Dynamic plugins .dll
 bin/
-
 # CDK credentials
 cdk.context.json
+# Environment / secrets
+.env
+.env.*
+# Dependencies
+node_modules/

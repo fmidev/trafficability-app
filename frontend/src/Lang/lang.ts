@@ -24,22 +24,46 @@ export const lang = {
           markdown: false
         },
         {
-          text: "Palvelu on osa Ulkoministeriön rahoittamaa IBA Arktisen maaston paloherkkyys -hankkeen kehitystyötä, jonka tavoitteena on parantaa ja tehostaa maastopaloihin varautumista Arktisella alueella. Lisätietoja palvelusta ja hankkeesta:  [vettakengassa@fmi.fi](mailto:vettakengassa@fmi.fi)",
+          text: 'Palvelu sai alkunsa Ulkoministeriön rahoittamassa IBA Arktisen maaston paloherkkyys -hankkeessa. Kehitystä jatketaan CryoSCOPE EU Horizon-hankkeessa, jossa kulkukelpoisuutta laajennetaan myös talveen: ennusteet palvelevat metsäkoneita, mönkijöitä, moottorikelkkoja sekä hiihtäjiä ja retkeilijöitä. Samaa lumen ja sulamisveden mallinnusta hyödynnetään myös vesivoiman tuotantopotentiaalin ja vesivarantojen ennakoinnissa. Lisätietoja: [vettakengassa@fmi.fi](mailto:vettakengassa@fmi.fi) ja [cryoscope-project.eu](https://cryoscope-project.eu/).',
+          markdown: true
+        },        {
+          text: '**Ohjeita havainnointiin**',
           markdown: true
         },
         {
-          text: '**Vettä kengässä? -sovelluksen käyttö ilman internetyhteyttä**',
+          text: 'Kosteushavaintoja toivotaan koko havaintokauden ajan, joka alkaa lumien ja jään sulettua ja päättyy niiden palatessa syksyllä. Havaintoja voi tehdä mihin vuorokaudenaikaan tahansa. Tee havainnot maastossa, ei polulla tai tiellä. Myös samasta sijainnista eri aikoina saadut havainnot ovat arvokkaita.',
           markdown: true
         },
         {
-          text: 'Jos olet menossa alueelle, jossa ei ole toimivaa internetyhteyttä, voit silti käyttää Vettä kengässä? -sovellusta jättääksesi havainnon. Toimi näin:',
+          text:
+          'Kartan paikannus:\n' +
+          '*   Aktivoi kartta klikkaamalla. Tietojen latautuminen voi kestää hetken.\n' +
+          '*   Sovellus paikantaa sijaintisi ja näyttää kartalla myös tarkkuusympyrän.\n' +
+          '*   Liikuta itseäsi kartalla hieman, jotta paikannus tarkentuu.\n' +
+          '*   Tarkista, ettei paikannus siirtynyt väärään kohtaan. Suomen ulkopuolella valitse kieleksi englanti, jolloin paikannus toimii myös ulkomailla.\n',
+          markdown: true
+        },
+        {
+          text:
+          'Kuva havainnosta:\n' +
+          '*   Kuvassa tulee näkyä kengänpohja sekä astumasi jälki.\n' +
+          '*   Varmista, ettei kengänpohjaan tai jälkeen osu tarpeettomia varjoja.\n' +
+          '*   Jos kuvaat puhelimen kameralla sovelluksen sijaan, käytä yleiskuvatoimintoa (ei muotokuvaa).\n',
+          markdown: true
+        },
+        {
+          text: '**Vettä kengässä? -palvelun käyttö ilman internetyhteyttä**',
+          markdown: true
+        },
+        {
+          text: 'Jos olet menossa alueelle, jossa ei ole toimivaa internetyhteyttä, voit silti käyttää Vettä kengässä? -palvelua jättääksesi havainnon. Toimi näin:',
           markdown: true
         },
         {
           text: 
           'Ennen kuin menet havaintopaikalle:\n' +
-          '*   Avaa sovellus ja lataa kartta.\n' +
-          '*   Varmista, että koko suunnittelemasi reitti näkyy sovelluksen kartalla.\n' +
+          '*   Avaa trafficability.xyz ja lataa kartta.\n' +
+          '*   Varmista, että koko suunnittelemasi reitti näkyy kartalla.\n' +
           '*   Esiladatut karttatiilet toimivat ilman internetyhteyttä.\n' +
           '*   Anna puhelimen kamerasovellukselle lupa käyttää sijaintiasi.\n',
           markdown: true
@@ -48,7 +72,7 @@ export const lang = {
           text: 
           'Havaintopaikassa:\n' +
           '*   Merkitse havaintopaikka kartalle.\n' +
-          '*   Tarkista, näyttääkö sovelluksen paikannus oikean sijainnin.\n' +
+          '*   Tarkista, näyttääkö kartan paikannus oikean sijainnin.\n' +
           '*   Siirrä karttaa tarvittaessa oikeaan sijaintiin.\n',
           markdown: true
         },
@@ -63,8 +87,8 @@ export const lang = {
         {
           text: 
           'Täytä lomake:\n' +
-          '*   Kirjaa havaintosi lomakkeelle.\n' +
-          '*   Pidä lomake avoinna sovelluksessa – voit lähettää sen, kun saat internetyhteyden.\n' +
+          '*   Kirjaa havaintosi lomakkeelle ja paina Lähetä.\n' +
+          '*   Pidä lomake avoinna selaimessa – se tallentuu, kun saat internetyhteyden.\n' +
           '\n',
           markdown: true
         },
@@ -85,6 +109,14 @@ export const lang = {
           tasaisiin ja suppeneviin kohtiin, joten laaksot ja painanteet ovat märkiä (tummia) ja 
           rinteet ja harjanteet kuivia (vaaleita). Se kuvaa maaston taipumusta pidättää vettä, ei tietyn päivän säätä.`,
           markdown: false
+        },
+                {
+          text: '**Tee havaintoja ja ansaitse frisbeegolfkiekko!**',
+          markdown: true
+        },
+        {
+          text: 'Tee 64 laadukasta havaintoa, niin palkitsemme sinut kiekolla 64 Discmania-kiekon valikoimastamme. Käytä kaikissa havainnoissasi samaa nimimerkkiä. Lähetä nimimerkkisi ja sähköpostiosoitteesi osoitteeseen [vettakengassa@fmi.fi](mailto:vettakengassa@fmi.fi), niin olemme sinuun yhteydessä.',
+          markdown: true
         },
       
       ]
@@ -153,8 +185,8 @@ export const lang = {
       },
     },
     commentComponent: {
-      header: "Osallistu kilpailuun",
-      subHeaderText: "Jätä nimimerkki.",
+      header: "Tee havaintoja ja ansaitse frisbeegolfkiekko!",
+      subHeaderText: "Jätä nimimerkki. Käytä samaa nimimerkkiä kaikissa havainnoissasi. Lue lisää Lisätietoja-osiosta.",
     },
     certaintyOfObservationAssessment: {
       header: "Havainnon varmuus",
@@ -247,51 +279,75 @@ export const lang = {
           markdown: false
         },
         {
-          text: 'The service is part of the development work of the IBA Arctic Terrain Fire Susceptibility project, funded by the Ministry for Foreign Affairs. The project aims to improve and strengthen wildfire preparedness in the Arctic. For more information about the service and the project, please contact: [vettakengassa@fmi.fi](mailto:vettakengassa@fmi.fi)',
+          text: 'The service began in the IBA Arctic Terrain Fire Susceptibility project, funded by the Ministry for Foreign Affairs. Its development continues in the CryoSCOPE EU Horizon project, which extends trafficability into winter: forecasts serve forestry machines, ATVs, snowmobiles, skiers and hikers. The same snow and meltwater modelling also feeds forecasts of hydropower potential and seasonal water reserves. For more information: [vettakengassa@fmi.fi](mailto:vettakengassa@fmi.fi) and [cryoscope-project.eu](https://cryoscope-project.eu/).',
+          markdown: true
+        }, 
+                {
+          text: '**Tips for making observations**\n',
           markdown: true
         },
         {
-          text: '**Using the Water in Your Boots? App Without an Internet Connection**\n',
+          text: 'Wetness observations are welcome throughout the season, which begins once the snow and ice have melted and ends when they return in autumn. You can observe at any time of day. Make observations out in the terrain, not on a path or road. Repeat observations at the same spot at different times are valuable too.',
           markdown: true
         },
         {
-          text: 
-          'If you\'re heading to an area without a working internet connection, you can still use the Water in Your Boots? app to submit an observation. Here\'s how:\n',
+          text:
+          'Locating on the map:\n' +
+          '*   Activate the map by tapping it. Loading the data may take a moment.\n' +
+          '*   The app locates your position and shows an accuracy circle on the map.\n' +
+          '*   Move yourself slightly on the map so the position sharpens.\n' +
+          '*   Check that the position did not jump to the wrong spot. Outside Finland, set the language to English so positioning works abroad.\n',
           markdown: true
         },
         {
-          text: 
+          text:
+          'Photographing the observation:\n' +
+          '*   The photo should show the sole of your boot and the track you left.\n' +
+          '*   Make sure no unnecessary shadows fall on the sole or track.\n' +
+          '*   If you use the phone camera instead of the app, use the normal photo mode (not portrait).\n',
+          markdown: true
+        },
+                {
+          text: '**Using the Water in Your Boots? service without an internet connection**',
+          markdown: true
+        },
+        {
+          text: 'If you\'re heading to an area without a working internet connection, you can still use the Water in Your Boots? service to submit an observation. Here\'s how:',
+          markdown: true
+        },
+        {
+          text:
           'Before going to the observation site:\n' +
-          '*   Open the app and download the map.\n' +
-          '*   Make sure your entire planned route is visible on the app’s map.\n' +
-          '*   Preloaded map tiles will work offline.\n' +
-          '*   Allow your phone’s camera app to access your location.\n',
+          '*   Open trafficability.xyz and load the map.\n' +
+          '*   Make sure your entire planned route is visible on the map. Preloaded map tiles will work offline.\n' +
+          '*   Allow your phone\'s camera app to access your location.\n',
           markdown: true
         },
         {
-          text: 
+          text:
           'At the observation site:\n' +
           '*   Mark the observation location on the map.\n' +
-          '*   Check if the app shows the correct location.\n' +
+          '*   Check whether the map positioning shows the correct location.\n' +
           '*   Move the map if necessary to adjust to the correct spot.\n',
           markdown: true
         },
         {
-          text: 
+          text:
           'Take a photo of the observation:\n' +
-          '*   Capture the terrain’s wetness condition using your phone’s camera.\n' +
-          '*   The photo’s timestamp helps identify when the observation was made.\n' +
-          '*   The photo’s location data helps determine where the observation was taken.\n',
+          '*   Capture the terrain\'s wetness condition using your phone\'s camera.\n' +
+          '*   The photo\'s timestamp helps identify when the observation was made.\n' +
+          '*   The photo\'s location data helps determine where the observation was taken.\n',
           markdown: true
         },
         {
-          text: 
+          text:
           'Fill in the form:\n' +
-          '*   Record your observation using the form.\n' +
-          '*   Keep the form open in the app—you can submit it once you’re back online.\n',
+          '*   Record your observation on the form and press Send.\n' +
+          '*   Keep the form open in the browser \u2013 it will be submitted once you\'re back online.\n' +
+          '\n',
           markdown: true
         },
-                {
+        {
           text: '**XTRAFF soil wetness and TWI topographic wetness index**\n',
           markdown: true
         },
@@ -302,7 +358,15 @@ export const lang = {
         {
           text: 'The topographic wetness index (TWI) uses the shape of the terrain to indicate which spots tend to stay wet. Water flows downhill and collects in low, flat and converging areas, so valleys and hollows are wet (dark) while slopes and ridges are dry (light). It reflects the terrains tendency to hold water, not the weather on any given day.',
           markdown: false
-        }
+        },
+                {
+          text: '**Make observations and win a disc golf disc!**\n',
+          markdown: true
+        },
+        {
+          text: 'Make 64 quality observations and we will reward you with a disc from our selection of 64 Discmania discs. Use the same nickname for all your observations. Send your nickname and email address to [vettakengassa@fmi.fi](mailto:vettakengassa@fmi.fi) and we will get in touch with you.',
+          markdown: true
+        },
       ]
     },
     leaveObservation: {
@@ -369,8 +433,8 @@ export const lang = {
       },
     },
     commentComponent: {
-      header: "Join the competition",
-      subHeaderText: "Leave a nickname.",
+      header: "Make observations and earn a frisbee golf disc!",
+      subHeaderText: "Leave a nickname. Use same nicname for all your observations. See More information.",
     },
     certaintyOfObservationAssessment: {
       header: "Observation certainty",

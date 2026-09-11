@@ -61,6 +61,16 @@ const MapComponent: FC<MapComponentProps> = ({
     md: 4.7
   });
 
+  // Keep the latest zoomLevel and center in refs so the map-creation effect can
+  // read them at build time without depending on them. Depending on zoomLevel
+  // (which changes when the viewport crosses a Chakra breakpoint, e.g. on phone
+  // rotation) would tear down and rebuild the map, discarding the user's pan,
+  // zoom and marker. The map is built once and left alone thereafter.
+  const zoomLevelRef = useRef(zoomLevel);
+  zoomLevelRef.current = zoomLevel;
+  const centerRef = useRef(center);
+  centerRef.current = center;
+
   const createLocateButton = useCallback(() => {
     const button = document.createElement("button");
     button.innerHTML = `
@@ -92,8 +102,8 @@ const MapComponent: FC<MapComponentProps> = ({
       controls: defaultControls().extend([]),
       view: new View({
         projection: "EPSG:3857",
-        center: fromLonLat(center),
-        zoom: zoomLevel// 5.05 //4.15,
+        center: fromLonLat(centerRef.current),
+        zoom: zoomLevelRef.current,
       }),
     });
 
@@ -104,8 +114,9 @@ const MapComponent: FC<MapComponentProps> = ({
       newMap.setTarget(undefined);
       setMap(null);
     };
+    // Built once on mount; rotation/resize must not rebuild the map.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [zoomLevel]);
+  }, []);
 
   useEffect(() => {
     if (!map) return;

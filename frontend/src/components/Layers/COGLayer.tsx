@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import GeoTIFFSource from "ol/source/GeoTIFF";
 import TileLayer, { Style } from "ol/layer/WebGLTile";
 import AppContext from "../../context/AppContext/AppContext";
@@ -6,7 +6,7 @@ import debounce from "lodash/debounce";
 import BaseEvent from "ol/events/Event";
 import { unByKey } from "ol/Observable";
 
-const COGLayerComponent = () => {
+const COGLayerComponent = ({ opacity }: { opacity: number }) => {
   const appContext = useContext(AppContext);
 
   if (!appContext) {
@@ -14,6 +14,10 @@ const COGLayerComponent = () => {
   }
 
   const { map, layers } = appContext;
+
+  const layerRef = useRef<TileLayer | null>(null);
+  const opacityRef = useRef(opacity);
+  opacityRef.current = opacity;
 
   useEffect(() => {
     if (!map || !layers) return;
@@ -56,9 +60,10 @@ const COGLayerComponent = () => {
       zIndex: 1100,
       className: "twi-blend",
       source: source,
-      opacity: 0.6,
+      opacity: opacityRef.current,
       style: createStyleForValue(0),
     });
+    layerRef.current = layer;
 
     // This will trigger a map render, but debouce it so we don't end up re-rendering multiple times over
     const debouncedMapRender = debounce((value: number) => {
@@ -89,9 +94,15 @@ const COGLayerComponent = () => {
       if (layer instanceof TileLayer) {
         layers.getLayers().remove(layer);
       }
+      layerRef.current = null;
       unByKey(eventKey);
     };
   }, [map, layers]);
+
+  // Live-update opacity from the slider without rebuilding the layer.
+  useEffect(() => {
+    layerRef.current?.setOpacity(opacity);
+  }, [opacity]);
 
   return null;
 };

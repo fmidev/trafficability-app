@@ -341,12 +341,9 @@ const AppContainer = () => {
               <AccordionIcon />
             </AccordionButton>
             <AccordionPanel px="2" pb="4">
-              <GridItem
-                area={"exampleFileArea"}
-                height={{ base: "320px", sm: "450px" }}
-              >
-                <Box h="100%">
-                  <HStack h="10%">
+              <GridItem area={"exampleFileArea"}>
+                <Box>
+                  <HStack>
                     <AddPhotoAlternateOutlined
                       fontSize={isMobile ? "medium" : "large"}
                       sx={{ marginLeft: "-2px", marginRight: "-4px" }}
@@ -354,12 +351,12 @@ const AppContainer = () => {
                     <Header title={language.examplePictureText.header} showAsterisk />
                   </HStack>
 
-                  <Box h="90%" w="100%" flex="1" borderRadius="md" boxShadow="sm">
+                  <Box w="100%" borderRadius="md" boxShadow="sm" mt="1">
                     <Image
                       src={soil_boot_footprint}
-                      h="100%"
                       w="100%"
-                      objectFit="cover"
+                      h="auto"
+                      objectFit="contain"
                       border="1px solid"
                       borderColor="inherit"
                       borderRadius="md"

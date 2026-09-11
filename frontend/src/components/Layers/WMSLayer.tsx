@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import TileLayer from "ol/layer/Tile";
 import AppContext from "../../context/AppContext/AppContext";
 import TileWMS from "ol/source/TileWMS.js";
@@ -64,12 +64,18 @@ async function getLatestTime(): Promise<string | null> {
   return toSmartmetTime(latest);
 }
 
-const WMSLayerComponent = () => {
+const WMSLayerComponent = ({ opacity }: { opacity: number }) => {
   const appContext = useContext(AppContext);
   if (!appContext) throw new Error("Context is needed");
   const { map, layers } = appContext;
 
   const [dataTime, setDataTime] = useState<string | null>(null);
+
+  // Hold the live layer + the current opacity so the create-effect (keyed on
+  // map/layers) doesn't need opacity in its deps and won't recreate on drag.
+  const layerRef = useRef<TileLayer<TileWMS> | null>(null);
+  const opacityRef = useRef(opacity);
+  opacityRef.current = opacity;
 
   useEffect(() => {
     if (!map || !layers) return;
@@ -90,7 +96,8 @@ const WMSLayerComponent = () => {
           ORIGIN_TIME,
         },
       });
-      layer = new TileLayer({ zIndex: 1000, source, opacity: 0.8 });
+      layer = new TileLayer({ zIndex: 1000, source, opacity: opacityRef.current });
+      layerRef.current = layer;
       layers.getLayers().push(layer);
       setDataTime(time);
     })();
@@ -98,9 +105,15 @@ const WMSLayerComponent = () => {
     return () => {
       cancelled = true;
       if (layer) layers.getLayers().remove(layer);
+      layerRef.current = null;
       setDataTime(null);
     };
   }, [map, layers]);
+
+  // Live-update opacity from the slider without rebuilding the layer.
+  useEffect(() => {
+    layerRef.current?.setOpacity(opacity);
+  }, [opacity]);
 
   if (!dataTime) return null;
 

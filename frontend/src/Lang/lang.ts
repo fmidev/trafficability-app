@@ -118,6 +118,10 @@ export const lang = {
           text: 'Tee 64 laadukasta havaintoa, niin palkitsemme sinut kiekolla 64 Discmania-kiekon valikoimastamme. Käytä kaikissa havainnoissasi samaa nimimerkkiä. Lähetä nimimerkkisi ja sähköpostiosoitteesi osoitteeseen [vettakengassa@fmi.fi](mailto:vettakengassa@fmi.fi), niin olemme sinuun yhteydessä.',
           markdown: true
         },
+        {
+          text: '__IMAGE__discs',
+          markdown: false
+        },
       
       ]
     },

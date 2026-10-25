@@ -1,6 +1,7 @@
 import { FC, useContext, useEffect } from "react";
 import TileLayer from "ol/layer/Tile";
-import WMTS, { Options as WMTSOptions } from "ol/source/WMTS.js";
+// import WMTS, { Options as WMTSOptions } from "ol/source/WMTS.js";
+import { Options as WMTSOptions } from "ol/source/WMTS.js";
 import AppContext from "../../context/AppContext/AppContext";
 import { OSM } from "ol/source";
 

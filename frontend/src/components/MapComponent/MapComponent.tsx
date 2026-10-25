@@ -179,7 +179,7 @@ const MapComponent: FC<MapComponentProps> = ({
             content: '""',
             position: "absolute",
             top: "50%",
-            left: "-62px",
+            left: "-70px",
             width: "140px",
             height: "2.7px",
             background: "green",

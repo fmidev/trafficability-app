@@ -73,7 +73,8 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
           crosshair={crosshair}
           center={[26.128804444, 65.322392778]}
           text={mapInfoText}>
-          <LayerComponent layerName='maastokartta' />
+          {/* <LayerComponent layerName='maastokartta' /> */}
+          <LayerComponent layerName='mapnik' />
           {(layerMode === 'wms' || layerMode === 'both') && <WMSLayerComponent opacity={opacity} />}
           {(layerMode === 'cog' || layerMode === 'both') && <COGLayerComponent opacity={opacity} />}
           <MarkerLayer

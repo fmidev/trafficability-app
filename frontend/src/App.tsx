@@ -20,7 +20,8 @@ function App() {
     const parser = new WMTSCapabilities();
     axios
       .get(
-        "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/WMTSCapabilities.xml?api-key=45deef08-fd2f-42ae-9953-5550fff43b17"
+        // "https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0/WMTSCapabilities.xml?api-key=45deef08-fd2f-42ae-9953-5550fff43b17"
+        "https://osmlab.github.io/wmts-osm/WMTSCapabilities.xml"
       )
       .then((response) => {
         const result = parser.read(response.data);

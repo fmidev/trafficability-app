@@ -29,11 +29,13 @@ const LayerComponent: FC<BaseLayerProps> = ({ layerName }) => {
         ? url
         : `${url}${
             url.includes("?") ? "&" : "?"
-          }api-key=45deef08-fd2f-42ae-9953-5550fff43b17`
+          // }api-key=45deef08-fd2f-42ae-9953-5550fff43b17`
+          }`
     );
     const layer = new TileLayer({
       zIndex: 100,
-      source: currentLanguage === 'fi' ? new WMTS(option): new OSM(),
+      // source: currentLanguage === 'fi' ? new WMTS(option): new OSM(),
+      source: new OSM(),
     });
 
     layers.getLayers().push(layer);

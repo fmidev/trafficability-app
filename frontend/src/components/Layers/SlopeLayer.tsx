@@ -15,12 +15,15 @@ export const SLOPE_COG_URL = "https://pta.data.lit.fmi.fi/dem/etrs-tm35fin-n2000
 // Raster values are slope angles in degrees.
 const DEG2RAD = Math.PI / 180;
 
-// Stretch: the 5th and 95th percentile of slope map to black and white.
+// Stretch: these percentiles of slope map to black and white (try 5/95 or 10/90).
 // AUTO: measured from the first tiles that load (logged to the console);
 // set to false to use the fixed values below instead.
 const SLOPE_AUTO_STRETCH = true;
-const SLOPE_P5_DEG = 0.5;
-const SLOPE_P95_DEG = 15;
+const STRETCH_LOW_PCT = 10;
+const STRETCH_HIGH_PCT = 90;
+// Fixed fallback stretch in degrees, used until (or instead of) the automatic one.
+const SLOPE_LO_DEG = 0.5;
+const SLOPE_HI_DEG = 15;
 // Pixels sampled before the automatic stretch is fixed.
 const AUTO_SAMPLE_TARGET = 200_000;
 
@@ -90,7 +93,7 @@ const SlopeLayerComponent = ({ opacity, blend }: SlopeLayerProps) => {
         // With normalize:false the alpha band is 0 or 255.
         const alpha: ExpressionValue = hasAlpha ? ["/", ["band", 2], 255] : 1;
         layer.setStyle({
-          variables: { qLo: q(SLOPE_P5_DEG), qHi: q(SLOPE_P95_DEG) },
+          variables: { qLo: q(SLOPE_LO_DEG), qHi: q(SLOPE_HI_DEG) },
           color: ["color", greyExpr, greyExpr, greyExpr, alpha],
         });
         layer.setVisible(true);
@@ -119,15 +122,15 @@ const SlopeLayerComponent = ({ opacity, blend }: SlopeLayerProps) => {
       calibrated = true;
       const sorted = Float64Array.from(samples).sort();
       samples = [];
-      const p5 = percentile(sorted, 5);
+      const pLo = percentile(sorted, STRETCH_LOW_PCT);
       const p50 = percentile(sorted, 50);
-      const p95 = percentile(sorted, 95);
+      const pHi = percentile(sorted, STRETCH_HIGH_PCT);
       console.info(
-        `[slope] raw values: min=${sorted[0].toFixed(3)} p5=${p5.toFixed(3)} median=${p50.toFixed(3)} ` +
-          `p95=${p95.toFixed(3)} max=${sorted[sorted.length - 1].toFixed(3)} (n=${sorted.length})`
+        `[slope] raw values: min=${sorted[0].toFixed(3)} p${STRETCH_LOW_PCT}=${pLo.toFixed(3)} median=${p50.toFixed(3)} ` +
+          `p${STRETCH_HIGH_PCT}=${pHi.toFixed(3)} max=${sorted[sorted.length - 1].toFixed(3)} (n=${sorted.length})`
       );
-      if (q(p95) > q(p5)) layer.updateStyleVariables({ qLo: q(p5), qHi: q(p95) });
-      else console.warn("[slope] p5 and p95 are equal; keeping the fixed stretch");
+      if (q(pHi) > q(pLo)) layer.updateStyleVariables({ qLo: q(pLo), qHi: q(pHi) });
+      else console.warn("[slope] low and high percentiles are equal; keeping the fixed stretch");
     };
     source.on("tileloadend", onTileLoad);
 

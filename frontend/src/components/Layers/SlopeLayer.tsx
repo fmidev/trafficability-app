@@ -6,11 +6,10 @@ import type DataTile from "ol/DataTile";
 import type { ExpressionValue } from "ol/expr/expression";
 import AppContext from "../../context/AppContext/AppContext";
 
-// Slope as a (Cloud Optimized) GeoTIFF reachable over HTTPS.
-// Testing: one 2 m map sheet (X4, northern Lapland).
-export const SLOPE_COG_URL = "https://pta.data.lit.fmi.fi/dem/etrs-tm35fin-n2000/slope/MML-DTM-2020-2m-X4-slope.tif";
-// Whole of Finland, once built:
-// export const SLOPE_COG_URL = "https://pta.data.lit.fmi.fi/dem/etrs-tm35fin-n2000/slope/MML-DTM-2020-10m-slope-cog.tif";
+// Slope as a (Cloud Optimized) GeoTIFF reachable over HTTPS: 2 m slope for all of Finland.
+export const SLOPE_COG_URL = "https://pta.data.lit.fmi.fi/dem/etrs-tm35fin-n2000/slope/etrs-tm35fin-n2000MML-DTM-2020-2m-slope.tif";
+// Single-sheet test file (X4, northern Lapland):
+// export const SLOPE_COG_URL = "https://pta.data.lit.fmi.fi/dem/etrs-tm35fin-n2000/slope/MML-DTM-2020-2m-X4-slope.tif";
 
 // Raster values are slope angles in degrees.
 const DEG2RAD = Math.PI / 180;
@@ -26,6 +25,12 @@ const SLOPE_LO_DEG = 0.5;
 const SLOPE_HI_DEG = 15;
 // Pixels sampled before the automatic stretch is fixed.
 const AUTO_SAMPLE_TARGET = 200_000;
+
+// The coarsest overview in the 2 m file is ~32 m. At 66°N the map shows ~124 m/px
+// at zoom 9, ~62 m at zoom 10 and ~31 m at zoom 11, so below zoom 11 the browser
+// downloads far more 32 m data than it can display (16x at zoom 9). From zoom 11
+// in, a view needs roughly 10 tiles. Lower this only with a coarser slope file.
+const SLOPE_MIN_ZOOM = 11;
 
 // q(θ) = 1 - cos(θ), written as 2·sin²(θ/2) so it stays exact for small slopes
 // (1 - cos loses all precision near 0° on mediump GPUs). q rises with steepness.
@@ -77,6 +82,8 @@ const SlopeLayerComponent = ({ opacity, blend }: SlopeLayerProps) => {
       className: blend ? "slope-blend" : "slope-plain",
       source,
       opacity: opacityRef.current,
+      // OpenLayers' minZoom is exclusive, so subtract a little to include SLOPE_MIN_ZOOM itself.
+      minZoom: SLOPE_MIN_ZOOM - 0.01,
       // Hidden until the style is set, once the band count is known.
       visible: false,
     });

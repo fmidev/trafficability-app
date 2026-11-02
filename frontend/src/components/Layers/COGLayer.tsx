@@ -6,7 +6,8 @@ import debounce from "lodash/debounce";
 import BaseEvent from "ol/events/Event";
 import { unByKey } from "ol/Observable";
 
-const COGLayerComponent = ({ opacity }: { opacity: number }) => {
+// blend: true -> soft-light blend onto the layers below (XTRAFF); false -> plain greyscale layer
+const COGLayerComponent = ({ opacity, blend = false }: { opacity: number; blend?: boolean }) => {
   const appContext = useContext(AppContext);
 
   if (!appContext) {
@@ -23,20 +24,18 @@ const COGLayerComponent = ({ opacity }: { opacity: number }) => {
     if (!map || !layers) return;
 
     // Greyscale TWI: light = dry (low TWI), dark = wet (high TWI).
-    // band 1 is normalised 0..1 by min/max below; (1 - band) inverts it,
-    // so dry → light (255), wet → dark. The +30 floor keeps wet from going
-    // fully black, so multiply darkens the SWI colour instead of erasing it.
+    // band 1 is normalised 0..1 by min/max below; (1 - band) inverts it.
+    // The window midpoint (-4.5) is close to the TWI mean (-4.6), so typical
+    // terrain lands near mid-grey, which the soft-light blend leaves unchanged:
+    // wetter than typical darkens the XTRAFF colour, drier lightens it.
     const createStyleForValue = (_value: number): Style => {
       return {
         color: [
           'color',
-          //['*', 255, ['-', 1, ['band', 1]]], // red
-          //['*', 255, ['-', 1, ['band', 1]]], // green
-          //['*', 255, ['-', 1, ['band', 1]]], // blue
-          ['+', 30, ['*', 225, ['clamp', ['-', 1, ['band', 1]], 0, 1]]], // red
-          ['+', 30, ['*', 225, ['clamp', ['-', 1, ['band', 1]], 0, 1]]], // green
-          ['+', 30, ['*', 225, ['clamp', ['-', 1, ['band', 1]], 0, 1]]], // blue
-          ['band', 2],                        // alpha
+          ['*', 255, ['clamp', ['-', 1, ['band', 1]], 0, 1]], // red
+          ['*', 255, ['clamp', ['-', 1, ['band', 1]], 0, 1]], // green
+          ['*', 255, ['clamp', ['-', 1, ['band', 1]], 0, 1]], // blue
+          ['band', 2],                                        // alpha
         ],
       }
     }
@@ -58,7 +57,8 @@ const COGLayerComponent = ({ opacity }: { opacity: number }) => {
     });
     const layer = new TileLayer({
       zIndex: 1100,
-      className: "twi-blend",
+      // Own canvas per class name; the CSS in index.css sets the blend mode.
+      className: blend ? "twi-blend" : "twi-plain",
       source: source,
       opacity: opacityRef.current,
       style: createStyleForValue(0),
@@ -97,7 +97,7 @@ const COGLayerComponent = ({ opacity }: { opacity: number }) => {
       layerRef.current = null;
       unByKey(eventKey);
     };
-  }, [map, layers]);
+  }, [map, layers, blend]);
 
   // Live-update opacity from the slider without rebuilding the layer.
   useEffect(() => {

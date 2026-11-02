@@ -4,6 +4,7 @@ import LayerComponent from '../../components/Layers/BaseLayer';
 import MarkerLayer from '../../components/Layers/MarkerLayer';
 import WMSLayerComponent from '../../components/Layers/WMSLayer';
 import COGLayerComponent from '../../components/Layers/COGLayer';
+import SlopeLayerComponent from '../../components/Layers/SlopeLayer';
 import TimeSliderComponent from '../../components/TimeSliderComponent/TimeSliderComponent';
 import AppContext from '../../context/AppContext/AppContext';
 import { WMS_URL, LayerTimeInfo, getLayerTimeInfo } from '../../utils/wmsCapabilities';
@@ -17,7 +18,7 @@ interface MapViewProps {
   crosshair: boolean;
 }
 
-type LayerMode = 'base' | 'wms' | 'cog' | 'both' | 'swe';
+type LayerMode = 'base' | 'wms' | 'cog' | 'both' | 'swe' | 'slope' | 'sweSlope';
 
 const XTRAFF_LAYER = 'gui:isobands:XTRAFF_SWI1_ENSMEAN';
 const SWE_LAYER = 'gui:isobands:SWE-Scandinavia';
@@ -30,8 +31,9 @@ const SWE_LEGEND_URL =
 
 // UI strings for the layer selector + legend + opacity slider, per language.
 const L: Record<string, {
-  base: string; swi: string; twi: string; both: string; swe: string; swiTitle: string; sweTitle: string;
-  dry: string; wet: string; showLegend: string; hideLegend: string; opacity: string; noTimes: string;
+  base: string; swi: string; twi: string; both: string; swe: string; slope: string; sweSlope: string;
+  swiTitle: string; sweTitle: string; slopeTitle: string; steep: string; flat: string; resNote: string;
+  dry: string; wet: string; showLegend: string; hideLegend: string; opacity: string; slopeOpacity: string; noTimes: string;
 }> = {
   fi: {
     base: 'Maastokartta',
@@ -39,6 +41,12 @@ const L: Record<string, {
     twi: 'TWI',
     both: 'XTRAFF ja TWI',
     swe: 'Lumen vesiarvo (SWE)',
+    slope: 'Rinteen jyrkkyys',
+    sweSlope: 'SWE ja rinteen jyrkkyys',
+    slopeTitle: 'Rinteen jyrkkyys',
+    steep: 'Jyrkkä',
+    flat: 'Tasainen',
+    resNote: 'Mallin resoluutio 500 m, maastovarjostus MML:n korkeusmallista',
     swiTitle: 'XTRAFF maaston kosteus',
     sweTitle: 'Lumen vesiarvo (SWE)',
     dry: 'Kuiva',
@@ -46,6 +54,7 @@ const L: Record<string, {
     showLegend: 'Näytä selite',
     hideLegend: 'Piilota selite',
     opacity: 'Peittävyys',
+    slopeOpacity: 'Rinteen jyrkkyyden peittävyys',
     noTimes: 'Ennusteaikoja ei saatu haettua.',
   },
   en: {
@@ -54,6 +63,12 @@ const L: Record<string, {
     twi: 'TWI',
     both: 'XTRAFF and TWI',
     swe: 'Snow water equivalent (SWE)',
+    slope: 'Slope',
+    sweSlope: 'SWE and slope',
+    slopeTitle: 'Slope',
+    steep: 'Steep',
+    flat: 'Flat',
+    resNote: 'Model resolution 500 m, terrain shading from NLS elevation model',
     swiTitle: 'XTRAFF soil wetness',
     sweTitle: 'Snow water equivalent (SWE)',
     dry: 'Dry',
@@ -61,6 +76,7 @@ const L: Record<string, {
     showLegend: 'Show legend',
     hideLegend: 'Hide legend',
     opacity: 'Opacity',
+    slopeOpacity: 'Slope opacity',
     noTimes: 'Could not load forecast times.',
   },
 };
@@ -89,6 +105,8 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
   );
   // Overlay opacity over the basemap, driven by the slider below the map.
   const [opacity, setOpacity] = useState<number>(0.7);
+  // Slope shading strength on top of SWE (SWE and slope mode); kept low so the SWE colours stay readable.
+  const [slopeOpacity, setSlopeOpacity] = useState<number>(0.1);
 
   // Forecast run + valid times per WMS layer, read from GetCapabilities.
   const [timeInfo, setTimeInfo] = useState<Record<string, LayerTimeInfo | null>>({});
@@ -102,7 +120,8 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
 
   const showXtraff = layerMode === 'wms' || layerMode === 'both';
   const showTwi = layerMode === 'cog' || layerMode === 'both';
-  const showSwe = layerMode === 'swe';
+  const showSwe = layerMode === 'swe' || layerMode === 'sweSlope';
+  const showSlope = layerMode === 'slope' || layerMode === 'sweSlope';
 
   useEffect(() => {
     let cancelled = false;
@@ -194,7 +213,9 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
               originTime={timeInfo[SWE_LAYER]?.originTime ?? null}
             />
           )}
-          {showTwi && <COGLayerComponent opacity={opacity} />}
+          {/* TWI and slope blend onto the colour layer only in the combined modes */}
+          {showTwi && <COGLayerComponent opacity={opacity} blend={layerMode === 'both'} />}
+          {showSlope && <SlopeLayerComponent opacity={layerMode === 'sweSlope' ? slopeOpacity : opacity} blend={layerMode === 'sweSlope'} />}
           <MarkerLayer
             setCrosshair={setCrosshair}
             setStrokeColor={setStrokeColor}
@@ -211,6 +232,8 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
           {radio('cog', t.twi)}
           {radio('both', t.both)}
           {radio('swe', t.swe)}
+          {radio('slope', t.slope)}
+          {radio('sweSlope', t.sweSlope)}
         </div>
 
         {/* Legend — toggleable; hidden in basemap-only mode. Button stays visible so the legend can be reopened. */}
@@ -256,6 +279,24 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
                     </div>
                   </div>
                 )}
+                {showSlope && (
+                  <div>
+                    <div style={{ fontWeight: 600, marginBottom: 2 }}>{t.slopeTitle}</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
+                      <span>{t.steep}</span>
+                      <div style={{ width: 20, height: 245,
+                        background: 'linear-gradient(to bottom, #ffffff, #1e1e1e)',
+                        border: '1px solid #ccc' }} />
+                      <span>{t.flat}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            {legendOpen && layerMode === 'sweSlope' && (
+              <div style={{ background: 'rgba(255,255,255,0.85)', padding: '2px 6px', borderRadius: 4,
+                            font: '12px sans-serif', maxWidth: 260, textAlign: 'right' }}>
+                {t.resNote}
               </div>
             )}
           </div>
@@ -277,6 +318,24 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
             style={{ flex: 1 }}
           />
           <span style={{ width: 44, textAlign: 'right' }}>{Math.round(opacity * 100)} %</span>
+        </div>
+      )}
+
+      {/* Separate strength for the slope shading in the SWE and slope mode. */}
+      {layerMode === 'sweSlope' && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10,
+                      padding: '0 4px 8px', font: '14px sans-serif' }}>
+          <span style={{ whiteSpace: 'nowrap' }}>{t.slopeOpacity}</span>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={slopeOpacity}
+            onChange={(e) => setSlopeOpacity(parseFloat(e.target.value))}
+            style={{ flex: 1 }}
+          />
+          <span style={{ width: 44, textAlign: 'right' }}>{Math.round(slopeOpacity * 100)} %</span>
         </div>
       )}
     </div>

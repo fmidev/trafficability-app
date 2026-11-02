@@ -76,3 +76,10 @@ button:focus-visible {
 .info-text ul {
   padding-left: 2em;
 }
+/* Terrain shading layers blended onto the colour layers below them.
+   soft-light leaves mid-grey unchanged, darker darkens and lighter lightens.
+   Try overlay for a stronger effect. */
+.twi-blend,
+.slope-blend {
+  mix-blend-mode: soft-light;
+}

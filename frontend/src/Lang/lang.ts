@@ -104,7 +104,7 @@ export const lang = {
           markdown: false
         },
           {
-          text: `TWI topografinen kosteusindeksi (topographic wetness index) Topografinen kosteusindeksi (TWI) kertoo maaston muodon perusteella, 
+          text: `TWI topografinen kosteusindeksi (topographic wetness index) kertoo maaston muodon perusteella, 
           mitkä kohdat pysyvät tyypillisesti märkinä. Vesi valuu alaspäin ja kerääntyy mataliin, 
           tasaisiin ja suppeneviin kohtiin, joten laaksot ja painanteet ovat märkiä (tummia) ja 
           rinteet ja harjanteet kuivia (vaaleita). Se kuvaa maaston taipumusta pidättää vettä, ei tietyn päivän säätä.`,
@@ -119,6 +119,17 @@ export const lang = {
           markdown: true
         },
         {
+          text: '**Kiekkokilpailun säännöt**',
+          markdown: true
+        },
+        {
+          text:
+'Voit ansaita kiekon tekemällä 64 laadukasta havaintoa. Laadukkaat havainnot täyttävät seuraavat kriteerit:\n' +
+'*   havainnoissa täytyy olla kuva havainnon sijainnista maastossa mukana, ks. kuvausohje ylempänä\n' +
+'*   havainnot tulee tehdä joko ERI AIKOINA tai ERI SIJAINNEISSA: voit tehdä samassa sijainnissa havainnot vähintään päivän välein, tai minimietäisyys havaintojen välillä on oltava 10 metriä\n' +
+'*   vain havainnot, jotka on tehty maastossa (eli ei tiellä, polulla, sisällä) hyväksytään\n',
+          markdown: true
+        },    {
           text: '__IMAGE__discs',
           markdown: false
         },
@@ -369,6 +380,18 @@ export const lang = {
         },
         {
           text: 'Make 64 quality observations and we will reward you with a disc from our selection of 64 Discmania discs. Use the same nickname for all your observations. Send your nickname and email address to [vettakengassa@fmi.fi](mailto:vettakengassa@fmi.fi) and we will get in touch with you.',
+          markdown: true
+        },
+                {
+          text: '**Disc competition rules**',
+          markdown: true
+        },
+        {
+          text:
+'You can earn a disc by making 64 high quality observations. High quality observations meet the following criteria:\n' +
+'*   the observation must include a photo of the observation site in the terrain, see the photo instructions above\n' +
+'*   observations must be made either at DIFFERENT TIMES or at DIFFERENT LOCATIONS: you can make observations at the same location at most once per day, or the minimum distance between observations must be 10 metres\n' +
+'*   only observations made in the terrain (i.e. not on a road, path or indoors) are accepted\n',
           markdown: true
         },
       ]

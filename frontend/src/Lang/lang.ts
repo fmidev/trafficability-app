@@ -5,7 +5,7 @@ export const lang = {
       header: "Lisätietoja",
       body: [
         {
-          text: `Vettä kengässä! on kaikille luonnossa liikkujille suunnattu palvelu, 
+          text: `Maaston kulkukelpoisuus on kaikille luonnossa liikkujille suunnattu palvelu, 
             oli kulkuvälineenä sitten saappaat, mönkijä, metsäkone tai muu. 
             Maaston kosteus vaikuttaa kulkukelpoisuuteen: pehmeä tai vetinen maa voi 
             hidastaa kulkua, vaikeuttaa työtä ja pakottaa poikkeamaan reitiltä. 
@@ -19,7 +19,7 @@ export const lang = {
             Arktiset maastopalot ovat todellinen ja ajankohtainen uhka, 
             eivät enää tulevaisuuden haaste. Maastopalot voivat tuhota 
             laajoja maa-alueita ja aiheuttaa merkittävää vahinkoa paikalliselle 
-            ekosysteemille ja yhteisöille. Vettä kengässä! -sovelluksen avulla kerätyt havainnot maaston kosteudesta auttavat ennakoimaan paloherkkyyttä ja tukevat varautumista, kun kuivuusriski kasvaa. Jokainen havainto auttaa rakentamaan tarkempaa kuvaa maaston kosteuden vaihteluista ja siitä, missä paloriskit ovat suurimmillaan. Tällä tiedolla on suuri merkitys Arktisten alueiden suojelussa, 
+            ekosysteemille ja yhteisöille. Maaston kulkukelpoisuus -palvelun avulla kerätyt havainnot maaston kosteudesta auttavat ennakoimaan paloherkkyyttä ja tukevat varautumista, kun kuivuusriski kasvaa. Jokainen havainto auttaa rakentamaan tarkempaa kuvaa maaston kosteuden vaihteluista ja siitä, missä paloriskit ovat suurimmillaan. Tällä tiedolla on suuri merkitys Arktisten alueiden suojelussa, 
             ja jokainen havaitsija voi osaltaan olla mukana luomassa kestävämpää tulevaisuutta.`,
           markdown: false
         },
@@ -52,11 +52,11 @@ export const lang = {
           markdown: true
         },
         {
-          text: '**Vettä kengässä? -palvelun käyttö ilman internetyhteyttä**',
+          text: '**Maaston kulkukelpoisuus -palvelun käyttö ilman internetyhteyttä**',
           markdown: true
         },
         {
-          text: 'Jos olet menossa alueelle, jossa ei ole toimivaa internetyhteyttä, voit silti käyttää Vettä kengässä? -palvelua jättääksesi havainnon. Toimi näin:',
+          text: 'Jos olet menossa alueelle, jossa ei ole toimivaa internetyhteyttä, voit silti käyttää Maaston kulkukelpoisuus -palvelua jättääksesi havainnon. Toimi näin:',
           markdown: true
         },
         {
@@ -99,7 +99,7 @@ export const lang = {
         {
           text: `XTRAFF maaston kosteus tuote on päivittäinen XGBoost koneoppimisennuste maanpinnan kosteudesta 
           viidellä tasolla, erittäin kuivasta erittäin märkään. Se yhdistää sää-, satelliitti- 
-          ja maastotietoa sekä Vettä kengässä! -käyttäjien lähettämiä havaintoja. Ennuste lasketaan ECMWF:n 15 päivän parviennusteesta nykyiselle päivälle, kartta
+          ja maastotietoa sekä Maaston kulkukelpoisuus -palvelun käyttäjien lähettämiä havaintoja. Ennuste lasketaan ECMWF:n 15 päivän parviennusteesta nykyiselle päivälle, kartta
            esittää parven keskiarvon. Kaikkia uusia kosteushavaintoja käytetään mallin validointiin ja uudelleen kouluttamiseen.`,
           markdown: false
         },
@@ -124,10 +124,10 @@ export const lang = {
         },
         {
           text:
-'Voit ansaita kiekon tekemällä 64 laadukasta havaintoa. Laadukkaat havainnot täyttävät seuraavat kriteerit:\n' +
-'*   havainnoissa täytyy olla kuva havainnon sijainnista maastossa mukana, ks. kuvausohje ylempänä\n' +
-'*   havainnot tulee tehdä joko ERI AIKOINA tai ERI SIJAINNEISSA: voit tehdä samassa sijainnissa havainnot vähintään päivän välein, tai minimietäisyys havaintojen välillä on oltava 10 metriä\n' +
-'*   vain havainnot, jotka on tehty maastossa (eli ei tiellä, polulla, sisällä) hyväksytään\n',
+'Voit ansaita kiekon tekemällä 64 laadukasta havaintoa. Havainto on laadukas, kun se täyttää kaikki seuraavat ehdot:\n' +
+'*   havaintoon on liitetty havaintopaikalla maastossa otettu kuva, jossa näkyvät kengänpohjasi ja askeleesi maahan jättämä jälki (ks. kuvausohjeet yllä)\n' +
+'*   havainnot on tehty ERI AIKOINA tai ERI PAIKOISSA: samasta paikasta voit tehdä enintään yhden havainnon päivässä, muuten havaintojen välisen etäisyyden on oltava vähintään 10 metriä\n' +
+'*   havainto on tehty maastossa (ei tiellä, polulla tai sisätiloissa)\n',
           markdown: true
         },    {
           text: '__IMAGE__discs',
@@ -140,15 +140,16 @@ export const lang = {
       header: "Jätä havainto"
     },
     mainTitle: {
-      header: "Vettä kengässä? Maaston kosteus ja kulkukelpoisuus",
+      header: "Maaston kulkukelpoisuus",
     },
     mapTexts: {
       header: "Havainnon sijainti",
-      subHeader: "Valitse kartalta havainnon sijainti",
-      mapInfoText: "Vihje: Tämä kysymys yrittää käyttää sijaintiasi. Paina, jos haluat jatkaa."
+      subHeader: "Valitse kartalta havainnon sijainti. Kosketa karttaa, niin automaattinen paikannus käynnistyy. Korjaa paikannusta tarvittaessa tai valitse jokin muu sijainti.",
+      mapInfoText: "Vihje: Kosketa mitä tahansa kohtaa kartalla, niin sijaintisi paikannetaan automaattisesti. Salli sen jälkeen sijainnin käyttö."
     },
     examplePictureText: {
-      header: "Kuva jäljestä"
+      header: "Kuva jäljestä",
+      subHeader: "Esimerkkikuvat kahdesta ääripäästä: vasemmalla erittäin märkä, oikealla erittäin kuiva maasto."
     },
     fileField: {
       text: "Pudota tai valitse kuva"
@@ -286,11 +287,11 @@ export const lang = {
       header: "More information",
       body: [
         {
-          text: 'Water in Your Boots! is a service designed for everyone on the move in nature—whether your means of travel is boots, an ATV, a forestry machine, or something else. The soil wetness content of the terrain affects its trafficability: soft or waterlogged ground can slow you down, complicate work, and force you off your planned route. With the app, you can snap a photo of the terrain and the sole of your boot, give your assessment of the ground’s wetness, and submit your observation. These observations are then used to evaluate and improve the accuracy of the app’s soil wetness forecasts to develop better estimates.',
+          text: 'Terrain trafficability is a service designed for everyone on the move in nature—whether your means of travel is boots, an ATV, a forestry machine, or something else. The soil wetness content of the terrain affects its trafficability: soft or waterlogged ground can slow you down, complicate work, and force you off your planned route. With the app, you can snap a photo of the terrain and the sole of your boot, give your assessment of the ground’s wetness, and submit your observation. These observations are then used to evaluate and improve the accuracy of the app’s soil wetness forecasts to develop better estimates.',
           markdown: false
         },
         {
-          text: 'Terrain wetness/dryness affects more than just trafficability. In the Arctic, wildfires have become a pressing and real threat—not just a future challenge. Wildfires can destroy large areas and cause significant damage to local ecosystems and communities. The soil wetness observations collected via the Water in Your Boots! app help anticipate fire risks and support preparedness efforts as drought conditions worsen. Each observation contributes to a clearer picture of soil wetness variations across the landscape and pinpoints areas at greatest risk for wildfires. This information is crucial for protecting Arctic regions, and every observer can help build a more sustainable future.',
+          text: 'Terrain wetness/dryness affects more than just trafficability. In the Arctic, wildfires have become a pressing and real threat—not just a future challenge. Wildfires can destroy large areas and cause significant damage to local ecosystems and communities. The soil wetness observations collected via the Terrain trafficability service help anticipate fire risks and support preparedness efforts as drought conditions worsen. Each observation contributes to a clearer picture of soil wetness variations across the landscape and pinpoints areas at greatest risk for wildfires. This information is crucial for protecting Arctic regions, and every observer can help build a more sustainable future.',
           markdown: false
         },
         {
@@ -323,11 +324,11 @@ export const lang = {
           markdown: true
         },
                 {
-          text: '**Using the Water in Your Boots? service without an internet connection**',
+          text: '**Using the Terrain trafficability service without an internet connection**',
           markdown: true
         },
         {
-          text: 'If you\'re heading to an area without a working internet connection, you can still use the Water in Your Boots? service to submit an observation. Here\'s how:',
+          text: 'If you\'re heading to an area without a working internet connection, you can still use the Terrain trafficability service to submit an observation. Here\'s how:',
           markdown: true
         },
         {
@@ -367,7 +368,7 @@ export const lang = {
           markdown: true
         },
         {
-          text: 'The XTRAFF soil wetness product is a daily XGBoost machine-learning forecast of ground-surface soil wetness at five levels, from Very dry to Extremely wet. It combines weather, satellite and terrain data with observations submitted by Water in Your Boots! users. The forecast is computed from ECMWFs 15-day ensemble forecast for the current day, and the map shows the ensemble mean. All new soil wetness observations are used to validate and retrain the model.',
+          text: 'The XTRAFF soil wetness product is a daily XGBoost machine-learning forecast of ground-surface soil wetness at five levels, from Very dry to Extremely wet. It combines weather, satellite and terrain data with observations submitted by users of the Terrain trafficability service. The forecast is computed from ECMWFs 15-day ensemble forecast for the current day, and the map shows the ensemble mean. All new soil wetness observations are used to validate and retrain the model.',
           markdown: false
         },
         {
@@ -388,10 +389,10 @@ export const lang = {
         },
         {
           text:
-'You can earn a disc by making 64 high quality observations. High quality observations meet the following criteria:\n' +
-'*   the observation must include a photo of the observation site in the terrain, see the photo instructions above\n' +
-'*   observations must be made either at DIFFERENT TIMES or at DIFFERENT LOCATIONS: you can make observations at the same location at most once per day, or the minimum distance between observations must be 10 metres\n' +
-'*   only observations made in the terrain (i.e. not on a road, path or indoors) are accepted\n',
+'You can earn a disc by making 64 high-quality observations. An observation counts as high quality when it meets all of the following criteria:\n' +
+'*   it includes a photo taken at the observation site in the terrain, showing the sole of your boot and the footprint your step left in the ground (see the photo instructions above)\n' +
+'*   observations are made at DIFFERENT TIMES or at DIFFERENT LOCATIONS: at the same location you can make at most one observation per day, otherwise observations must be at least 10 metres apart\n' +
+'*   it is made in the terrain (not on a road, path or indoors)\n',
           markdown: true
         },
       ]
@@ -400,15 +401,16 @@ export const lang = {
       header: "Leave your observation"
     },
     mainTitle: {
-      header:  "Water in Your Boots? Soil wetness and Terrain trafficability",
+      header: "Terrain trafficability",
     },
     mapTexts: {
       header: "Observation location",
-      subHeader: "Select the observation location on the map",
-      mapInfoText: "Hint: This question tries to use your location. Press if you want to continue."
+      subHeader: "Select the observation location on the map. Touch the map to start automatic positioning. If needed, correct the position or choose another location.",
+      mapInfoText: "Tip: Touch anywhere on the map to locate yourself automatically, then allow location access."
     },
     examplePictureText: {
-      header: "Picture of the track"
+      header: "Picture of the track",
+      subHeader: "Example photos of the two extremes: extremely wet ground on the left, very dry ground on the right."
     },
     fileField: {
       text: "Drop or select a picture"

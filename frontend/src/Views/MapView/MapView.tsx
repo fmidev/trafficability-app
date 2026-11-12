@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import MapComponent from '../../components/MapComponent/MapComponent';
-import LayerComponent from '../../components/Layers/BaseLayer';
+import BaseLayer, { Basemap } from '../../components/Layers/BaseLayer';
 import MarkerLayer from '../../components/Layers/MarkerLayer';
 import WMSLayerComponent from '../../components/Layers/WMSLayer';
 import COGLayerComponent from '../../components/Layers/COGLayer';
@@ -32,11 +32,20 @@ const SWE_LEGEND_URL =
 // UI strings for the layer selector + legend + opacity slider, per language.
 const L: Record<string, {
   base: string; swi: string; twi: string; both: string; swe: string; slope: string; sweSlope: string;
+  showLayers: string; hideLayers: string;
+  basemapTitle: string; layerTitle: string; bmMml: string; bmOsm: string; bmSat: string;
   swiTitle: string; sweTitle: string; slopeTitle: string; steep: string; flat: string; resNote: string;
   dry: string; wet: string; showLegend: string; hideLegend: string; opacity: string; slopeOpacity: string; noTimes: string;
 }> = {
   fi: {
-    base: 'Maastokartta',
+    base: 'Vain taustakartta',
+    showLayers: 'Näytä karttatasot',
+    hideLayers: 'Piilota karttatasot',
+    basemapTitle: 'Taustakartta',
+    layerTitle: 'Karttataso',
+    bmMml: 'Maastokartta',
+    bmOsm: 'OpenStreetMap',
+    bmSat: 'Satelliittikuva',
     swi: 'XTRAFF maaston kosteus',
     twi: 'TWI',
     both: 'XTRAFF ja TWI',
@@ -58,7 +67,14 @@ const L: Record<string, {
     noTimes: 'Ennusteaikoja ei saatu haettua.',
   },
   en: {
-    base: 'Basemap',
+    base: 'Basemap only',
+    showLayers: 'Show layers',
+    hideLayers: 'Hide layers',
+    basemapTitle: 'Basemap',
+    layerTitle: 'Map layer',
+    bmMml: 'Topographic map (NLS)',
+    bmOsm: 'OpenStreetMap',
+    bmSat: 'Satellite image',
     swi: 'XTRAFF soil wetness',
     twi: 'TWI',
     both: 'XTRAFF and TWI',
@@ -98,7 +114,10 @@ const defaultIndex = (times: string[]): number => {
 };
 
 const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, crosshair, setMapStrokeColor, mapInfoText }) => {
-  const [layerMode, setLayerMode] = useState<LayerMode>('both');
+  const [layerMode, setLayerMode] = useState<LayerMode>('base');
+  const [basemap, setBasemap] = useState<Basemap>('maastokartta');
+  // Layer selector starts hidden so it does not cover the map.
+  const [layersOpen, setLayersOpen] = useState(false);
   // Legend starts open on wide screens, collapsed on narrow (mobile) so it doesn't cover the map.
   const [legendOpen, setLegendOpen] = useState<boolean>(() =>
     typeof window !== 'undefined' ? window.innerWidth > 768 : true
@@ -171,6 +190,13 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
     </label>
   );
 
+  const basemapRadio = (bm: Basemap, label: string) => (
+    <label style={{ display: 'block' }}>
+      <input type="radio" name="basemap" checked={basemap === bm}
+             onChange={() => setBasemap(bm)} /> {label}
+    </label>
+  );
+
   return (
     <div>
       {/* Forecast time control (10-day forecast), shown when a forecast layer is on */}
@@ -195,8 +221,7 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
           crosshair={crosshair}
           center={[26.128804444, 65.322392778]}
           text={mapInfoText}>
-          {/* <LayerComponent layerName='maastokartta' /> */}
-          <LayerComponent layerName='mapnik' />
+          <BaseLayer basemap={basemap} />
           {showXtraff && (
             <WMSLayerComponent
               layerName={XTRAFF_LAYER}
@@ -223,10 +248,25 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
           />
         </MapComponent>
 
-        {/* Layer selector */}
+        {/* Layer selector: hidden at first, opened with the Show layers button */}
         <div style={{ position: 'absolute', top: 10, right: 10, zIndex: 1000,
-                      background: '#fff', padding: '8px 10px', borderRadius: 4,
+                      display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+        <button
+          type="button"
+          onClick={() => setLayersOpen((o) => !o)}
+          style={{ background: '#fff', border: 'none', borderRadius: 4,
+                   boxShadow: '0 1px 4px rgba(0,0,0,.3)', padding: '6px 10px',
+                   font: '600 14px sans-serif', cursor: 'pointer' }}>
+          {layersOpen ? t.hideLayers : t.showLayers}
+        </button>
+        {layersOpen && (
+        <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 4,
                       boxShadow: '0 1px 4px rgba(0,0,0,.3)', font: '14px sans-serif' }}>
+          <div style={{ fontWeight: 600, marginBottom: 2 }}>{t.basemapTitle}</div>
+          {basemapRadio('maastokartta', t.bmMml)}
+          {basemapRadio('osm', t.bmOsm)}
+          {basemapRadio('satellite', t.bmSat)}
+          <div style={{ fontWeight: 600, margin: '6px 0 2px' }}>{t.layerTitle}</div>
           {radio('base', t.base)}
           {radio('wms', t.swi)}
           {radio('cog', t.twi)}
@@ -234,6 +274,8 @@ const MapView: FC<MapViewProps> = ({ setCrosshair, setStrokeColor, strokeColor, 
           {radio('swe', t.swe)}
           {radio('slope', t.slope)}
           {radio('sweSlope', t.sweSlope)}
+        </div>
+        )}
         </div>
 
         {/* Legend — toggleable; hidden in basemap-only mode. Button stays visible so the legend can be reopened. */}

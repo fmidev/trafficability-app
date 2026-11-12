@@ -15,7 +15,9 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Icon,
 } from "@chakra-ui/react";
+import { FaShoePrints } from "react-icons/fa";
 import soil_boot_footprint from "../assets/priittafigs.png";
 import { Position } from "../types";
 import AppContext from "../context/AppContext/AppContext";
@@ -266,11 +268,23 @@ const AppContainer = () => {
           justifyContent="space-between"
         >
           <Box w="55%">
-            <Flex alignItems="center">
+            {/* Title and a trail of shoe prints exactly as wide as the title */}
+            <Flex display="inline-flex" direction="column" maxW="100%">
               <Header
                 title={language?.mainTitle.header}
                 fontSize="calc(0.9rem + 1.3vmin)"
               />
+              <Flex justifyContent="space-between" w="100%" mt={{ base: 1, md: 2 }} aria-hidden="true">
+                {Array.from({ length: 8 }, (_, i) => (
+                  <Icon
+                    key={i}
+                    as={FaShoePrints}
+                    boxSize={{ base: 4, sm: 5, md: 6 }}
+                    color="gray.600"
+                    opacity={0.2 + (0.7 * i) / 7}
+                  />
+                ))}
+              </Flex>
             </Flex>
           </Box>
           <Box w="35%">
@@ -350,6 +364,9 @@ const AppContainer = () => {
                     />
                     <Header title={language.examplePictureText.header} showAsterisk />
                   </HStack>
+                  <Box>
+                    <Text fontSize="small">{language.examplePictureText.subHeader}</Text>
+                  </Box>
 
                   <Box w="100%" borderRadius="md" boxShadow="sm" mt="1">
                     <Image

@@ -29,10 +29,10 @@ const MarkerLayerComponent: FC<MarkerLayerComponentProps> = ({
     throw new Error("Context is needed");
   }
 
-  const { map, layers, options, initialLocation, userAdjustedLocation , accuracy, updateUserAdjustedLocation, updateAccuracy } = appContext;
+  const { map, layers, initialLocation, userAdjustedLocation , accuracy, updateUserAdjustedLocation, updateAccuracy } = appContext;
 
   useEffect(() => {
-    if (!map || !options || initialLocation.lat === null || initialLocation.lon === null || accuracy === null)
+    if (!map || initialLocation.lat === null || initialLocation.lon === null || accuracy === null)
       return;
 
     const location = userAdjustedLocation.lat === null || userAdjustedLocation.lon === null ? initialLocation : userAdjustedLocation;
@@ -101,7 +101,6 @@ const MarkerLayerComponent: FC<MarkerLayerComponentProps> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     map,
-    options,
     initialLocation.lat,
     initialLocation.lon,
     userAdjustedLocation.lat,

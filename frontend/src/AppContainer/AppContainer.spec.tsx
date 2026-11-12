@@ -16,7 +16,7 @@ describe('Main component', () => {
   it("renders the Main component correctly", () => {
     renderWithProviders();
     expect(
-      screen.getByText("Vettä kengässä? Maaston kosteus ja kulkukelpoisuus")
+      screen.getByText("Maaston kulkukelpoisuus")
     ).toBeInTheDocument();
     expect(screen.getByText("Havainnon sijainti")).toBeInTheDocument();
     expect(screen.getByText("Kuva jäljestä")).toBeInTheDocument();

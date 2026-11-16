@@ -7,7 +7,7 @@ import {
   useState,
   useCallback,
 } from "react";
-import { Box, Text, useToast, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Text, Spinner, HStack, useToast, useBreakpointValue } from "@chakra-ui/react";
 import { Map, View } from "ol";
 import { defaults as defaultControls } from "ol/control";
 import "ol/ol.css";
@@ -17,6 +17,9 @@ import { register } from "ol/proj/proj4.js";
 import AppContext from "../../context/AppContext/AppContext";
 import { unByKey } from "ol/Observable";
 import { getCurrentPosition } from "../../utils/geolocationHandlers";
+import { GEOLOCATION_COOKIE, getCookie } from "../../utils/cookies";
+import { loadAdjustedLocation } from "../../utils/savedLocation";
+import { circular } from "ol/geom/Polygon";
 
 proj4.defs(
   "EPSG:3857",
@@ -52,8 +55,16 @@ const MapComponent: FC<MapComponentProps> = ({
   const mapRef = useRef<HTMLDivElement>(null);
 
   if (!appContext) throw new Error("AppContext is not defined");
-  const { map, setMap, layers, updateAccuracy, updateInitialLocation, updateUserAdjustedLocation } = appContext;
-  const [messageVisible, setMessageVisible] = useState<boolean>(true);
+  const { map, setMap, layers, updateAccuracy, updateInitialLocation, updateUserAdjustedLocation, currentLanguage } = appContext;
+  // True while a GPS request is running (automatic locate, tap on the map or the locate button)
+  const [locating, setLocating] = useState<boolean>(false);
+  const locatingText = currentLanguage === "en" ? "Getting GPS location..." : "Haetaan GPS-sijaintia...";
+  const stopLocating = () => setLocating(false);
+  // Hide the "tap the map" hint straight away if this browser has already allowed
+  // location; it comes back if locating fails.
+  const [messageVisible, setMessageVisible] = useState<boolean>(
+    () => getCookie(GEOLOCATION_COOKIE) !== "1"
+  );
   const toast = useToast();
   const zoomLevel = useBreakpointValue({
     base: 4,
@@ -70,6 +81,9 @@ const MapComponent: FC<MapComponentProps> = ({
   zoomLevelRef.current = zoomLevel;
   const centerRef = useRef(center);
   centerRef.current = center;
+  // The map instance auto-location has already run for (React StrictMode in dev
+  // builds the map twice, so a plain boolean could lock onto a discarded map).
+  const autoLocatedMapRef = useRef<Map | null>(null);
 
   const createLocateButton = useCallback(() => {
     const button = document.createElement("button");
@@ -86,7 +100,8 @@ const MapComponent: FC<MapComponentProps> = ({
     button.className = "ol-locate-button";
 
     button.addEventListener("click", () => {
-      getCurrentPosition(map, updateInitialLocation, updateAccuracy, setMessageVisible, toast);
+      setLocating(true);
+      getCurrentPosition(map, updateInitialLocation, updateAccuracy, setMessageVisible, toast, undefined, stopLocating);
       setStrokeColorInMap("#7CB9E8");
       updateUserAdjustedLocation({ lat: null, lon: null });
     });
@@ -122,7 +137,8 @@ const MapComponent: FC<MapComponentProps> = ({
     if (!map) return;
 
     const click = map.on("click", () =>{
-      getCurrentPosition(map, updateInitialLocation, updateAccuracy, setMessageVisible, toast)
+      setLocating(true);
+      getCurrentPosition(map, updateInitialLocation, updateAccuracy, setMessageVisible, toast, undefined, stopLocating);
       setStrokeColorInMap("#7CB9E8");
       updateUserAdjustedLocation({ lat: null, lon: null });
     }
@@ -136,6 +152,52 @@ const MapComponent: FC<MapComponentProps> = ({
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, updateInitialLocation, updateAccuracy, toast]);
+
+  // Locate automatically once the map exists if this browser has already allowed
+  // location access: either our cookie from an earlier successful fix, or the
+  // browser itself reports the permission as granted.
+  useEffect(() => {
+    if (!map || autoLocatedMapRef.current === map) return;
+    let cancelled = false;
+
+    const locate = () => {
+      if (cancelled || autoLocatedMapRef.current === map) return;
+      autoLocatedMapRef.current = map;
+      console.info("Auto-locating: location was allowed earlier in this browser");
+      // A spot picked by moving the map before the reload (kept for 12 h)
+      const saved = loadAdjustedLocation();
+      setStrokeColorInMap("#7CB9E8");
+      setLocating(true);
+      getCurrentPosition(map, updateInitialLocation, updateAccuracy, setMessageVisible, toast, () => {
+        if (!saved || saved.lat === null || saved.lon === null) return;
+        // GPS is still fetched (it is saved with the observation), but the
+        // marker and view continue from the spot the user picked.
+        updateUserAdjustedLocation(saved);
+        updateAccuracy(5);
+        setStrokeColorInMap("red");
+        const around = circular([saved.lon, saved.lat], 150).transform("EPSG:4326", "EPSG:3857");
+        map.getView().fit(around);
+      }, stopLocating);
+    };
+
+    if (getCookie(GEOLOCATION_COOKIE) === "1") {
+      locate();
+    } else if (navigator.permissions?.query) {
+      navigator.permissions
+        .query({ name: "geolocation" as PermissionName })
+        .then((status) => {
+          if (status.state === "granted") locate();
+        })
+        .catch(() => {
+          /* Permissions API not usable here; wait for a tap */
+        });
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map]);
 
   useEffect(() => {
     if (!map) return;
@@ -186,7 +248,28 @@ const MapComponent: FC<MapComponentProps> = ({
             transform: "translateY(-50%)",
           }}
         ></Box>
-        {messageVisible && (
+        {locating && (
+          <Box
+            position="absolute"
+            top="40px"
+            left={{ base: "56%", sm: "50%" }}
+            transform="translateX(-50%)"
+            backgroundColor="rgba(0, 0, 0, 0.55)"
+            color="white"
+            padding="8px 14px"
+            borderRadius="4px"
+            zIndex="101"
+            pointerEvents="none"
+            role="status"
+            aria-live="polite"
+          >
+            <HStack spacing="10px">
+              <Spinner size="sm" />
+              <Text fontWeight={700}>{locatingText}</Text>
+            </HStack>
+          </Box>
+        )}
+        {messageVisible && !locating && (
           <Box
             position="absolute"
             top="40px"

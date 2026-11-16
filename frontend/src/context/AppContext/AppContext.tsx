@@ -3,6 +3,8 @@ import { Position, AppContextType } from "../../types";
 import { Options as WMTSOptions } from "ol/source/WMTS.js";
 import { Map } from "ol";
 import LayerGroup from "ol/layer/Group";
+import { NICKNAME_COOKIE, getCookie, setCookie, deleteCookie } from "../../utils/cookies";
+import { saveAdjustedLocation, clearAdjustedLocation } from "../../utils/savedLocation";
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -13,7 +15,11 @@ type AppProviderProps = {
 export const AppProvider: FC<AppProviderProps> = ({ children }) => {
   const [answer, setAnswer] = useState<string>("");
   const [check, setCheck] = useState<boolean>(false);
-  const [contestantName, setContestantName] = useState<string>("");
+  // Nickname is restored from a cookie so the same browser keeps the same name tag
+  // across observations (the page reloads after every submit).
+  const [contestantName, setContestantName] = useState<string>(
+    () => getCookie(NICKNAME_COOKIE) ?? ""
+  );
   const [accuracy, setAccuracy] = useState<number | null>(null);
   const [currentLanguage, setCurrentLanguage] = useState<string>("fi");
   const [initialLocation, setOriginalLocation] = useState<Position>({
@@ -51,8 +57,14 @@ export const AppProvider: FC<AppProviderProps> = ({ children }) => {
   const updateAnswer = (answer: string) => setAnswer(answer);
   const updateFile = (file: { data: File | string; name: string }) =>
     setFile({ data: file.data, name: file instanceof File ? file.name : "" });
-  const updateContestantName = (contestantName: string) =>
+  const updateContestantName = (contestantName: string) => {
     setContestantName(contestantName);
+    if (contestantName.trim() === "") {
+      deleteCookie(NICKNAME_COOKIE);
+    } else {
+      setCookie(NICKNAME_COOKIE, contestantName);
+    }
+  };
   const updateImage = (image: string | null) => setImage(image);
   const updatePicture = (picture: { data: File | string; name: string }) =>
     setPicture({ data: picture.data, name: picture.name });
@@ -74,11 +86,19 @@ export const AppProvider: FC<AppProviderProps> = ({ children }) => {
       lon: fileGeoLocation.lon,
       lat: fileGeoLocation.lat,
     });
-  const updateUserAdjustedLocation = (userAdjustedLocation: Position) =>
+  const updateUserAdjustedLocation = (userAdjustedLocation: Position) => {
     setUserAdjusttedLocation({
       lon: userAdjustedLocation.lon,
       lat: userAdjustedLocation.lat,
     });
+    // A picked spot is remembered for the next page load; going back to GPS
+    // (tap on the map or the locate button) forgets it.
+    if (userAdjustedLocation.lat === null || userAdjustedLocation.lon === null) {
+      clearAdjustedLocation();
+    } else {
+      saveAdjustedLocation(userAdjustedLocation);
+    }
+  };
   const updateAccuracy = (accuracy: number | null) => setAccuracy(accuracy);
   const updateCheck = (check: boolean) => setCheck(check);
   const setLanguage = (language: string) => setCurrentLanguage(language);
